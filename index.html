@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LUXUSIMMOBILIEN — Premium Mobile Homes & Containers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#" class="brand">LUXUSIMMOBILIEN</a>
+  <nav class="nav">
+    <a href="#mobile-homes" data-i18n="nav_mobile">Mobile Homes</a>
+    <a href="#maritime" data-i18n="nav_maritime">Maritime</a>
+    <a href="#office" data-i18n="nav_office">Office</a>
+    <a href="#impressum" data-i18n="nav_contact">Contact</a>
+  </nav>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="de">DE</button>
+    <button class="lang-btn" data-lang="it">IT</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" alt="Luxury Real Estate">
+    </div>
+    <div class="hero-content">
+      <span class="eyebrow" data-i18n="hero_eyebrow">Premium Living & Working</span>
+      <h1 data-i18n="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
+      <p data-i18n="hero_subtitle">Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container.</p>
+      <a href="#collections" class="btn-scroll" data-i18n="hero_scroll">Kollektionen entdecken</a>
+    </div>
+  </section>
+
+  <section id="collections" class="collections">
+    <h2 class="section-title" data-i18n="collections_title">Unsere drei Säulen.</h2>
+    
+    <div class="grid-3">
+      <!-- Catégorie 1 -->
+      <a href="#mobile-homes" class="category-card">
+        <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=1000&auto=format&fit=crop" alt="Mobile Home">
+        <div class="card-content">
+          <span class="num">01</span>
+          <h3 data-i18n="cat_1_title">Mobile Homes</h3>
+          <p data-i18n="cat_1_desc">Modulares Wohnen auf höchstem Niveau.</p>
+        </div>
+      </a>
+
+      <!-- Catégorie 2 -->
+      <a href="#maritime" class="category-card">
+        <img src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1000&auto=format&fit=crop" alt="Maritime Container">
+        <div class="card-content">
+          <span class="num">02</span>
+          <h3 data-i18n="cat_2_title">Maritime</h3>
+          <p data-i18n="cat_2_desc">Robuste Schiffscontainer für einzigartige Projekte.</p>
+        </div>
+      </a>
+
+      <!-- Catégorie 3 -->
+      <a href="#office" class="category-card">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" alt="Office Container">
+        <div class="card-content">
+          <span class="num">03</span>
+          <h3 data-i18n="cat_3_title">Office</h3>
+          <p data-i18n="cat_3_desc">Flexible Arbeitsräume, sofort einsatzbereit.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Section Catalogue dynamique (remplie par JS) -->
+  <section id="showcase" class="showcase">
+    <h2 class="section-title" data-i18n="showcase_title">Aktuelle Auswahl.</h2>
+    <div id="product-grid" class="product-grid">
+      <p style="color: #555; text-align: center; width: 100%;">Produkte werden geladen...</p>
+    </div>
+  </section>
+
+</main>
+
+<footer id="impressum" class="site-footer">
+  <div class="footer-top">
+    <h2 class="footer-logo">LUXUSIMMOBILIEN</h2>
+  </div>
+  <div class="footer-grid">
+    <div>
+      <h4 data-i18n="footer_legal">Impressum</h4>
+      <p>
+        LUXUSIMMOBILIEN GmbH<br>
+        Max Mustermann Hauptstraße 42<br>
+        10117 Berlin, DEUTSCHLAND<br>
+        Vertreten durch: FRANZ JOSEF EMBERFER
+      </p>
+    </div>
+    <div>
+      <h4 data-i18n="footer_registry">Registereintrag</h4>
+      <p>
+        Amtsgericht Charlottenburg<br>
+        HRB 972025 B<br>
+        USt-IdNr: DE305687569
+      </p>
+    </div>
+    <div>
+      <h4 data-i18n="footer_contact">Kontakt</h4>
+      <p>
+        E-Mail: luxusimmobilien@inbox.eu<br>
+        Tel / WhatsApp: (+49) 178 406 5141
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; <span id="year"></span> LUXUSIMMOBILIEN GmbH. <span data-i18n="footer_rights">Alle Rechte vorbehalten.</span></p>
+  </div>
+</footer>
+
+<!-- Configuration Supabase -->
+<script type="module" src="supabase-config.js"></script>
+<script type="module" src="lang.js"></script>
+<script type="module" src="app.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
