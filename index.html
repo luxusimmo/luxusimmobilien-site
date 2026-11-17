@@ -37,9 +37,9 @@
 
 <!-- Navigation Mobile -->
 <nav id="mobile-nav" class="mobile-nav" hidden>
-  <a href="#collections" data-i18n="nav_mobile">Mobile Homes</a>
-  <a href="#collections" data-i18n="nav_maritime">Maritime</a>
-  <a href="#collections" data-i18n="nav_office">Office</a>
+  <a href="#showcase" onclick="filterCategory('mobile_home')" data-i18n="nav_mobile">Mobile Homes</a>
+  <a href="#showcase" onclick="filterCategory('maritime')" data-i18n="nav_maritime">Maritime</a>
+  <a href="#showcase" onclick="filterCategory('office')" data-i18n="nav_office">Office</a>
   <a href="#impressum" data-i18n="nav_contact">Contact</a>
 </nav>
 
@@ -47,7 +47,6 @@
   <!-- Diaporama d'images d'en-tête -->
   <section class="hero">
     <div class="hero-slider">
-      <!-- Vos images d'en-tête en .jpeg -->
       <img src="hero-1.jpeg" class="slide active" alt="Luxury Home">
       <img src="hero-2.jpeg" class="slide" alt="Mobile Home">
     </div>
@@ -64,40 +63,44 @@
     
     <div class="grid-3">
       <!-- Catégorie 1 -->
-      <a href="#mobile-homes" class="category-card">
+      <div class="category-card" onclick="filterCategory('mobile_home')" style="cursor: pointer;">
         <img src="cat-mobile.jpeg" alt="Mobile Home">
         <div class="card-content">
           <span class="num">01</span>
           <h3 data-i18n="cat_1_title">Mobile Homes</h3>
           <p data-i18n="cat_1_desc">Modulares Wohnen auf höchstem Niveau.</p>
         </div>
-      </a>
+      </div>
 
       <!-- Catégorie 2 -->
-      <a href="#maritime" class="category-card">
+      <div class="category-card" onclick="filterCategory('maritime')" style="cursor: pointer;">
         <img src="cat-maritime.jpeg" alt="Maritime Container">
         <div class="card-content">
           <span class="num">02</span>
           <h3 data-i18n="cat_2_title">Maritime</h3>
           <p data-i18n="cat_2_desc">Robuste Schiffscontainer für einzigartige Projekte.</p>
         </div>
-      </a>
+      </div>
 
       <!-- Catégorie 3 -->
-      <a href="#office" class="category-card">
+      <div class="category-card" onclick="filterCategory('office')" style="cursor: pointer;">
         <img src="cat-office.jpeg" alt="Office Container">
         <div class="card-content">
           <span class="num">03</span>
           <h3 data-i18n="cat_3_title">Office</h3>
           <p data-i18n="cat_3_desc">Flexible Arbeitsräume, sofort einsatzbereit.</p>
         </div>
-      </a>
+      </div>
     </div>
   </section>
 
   <!-- Section Catalogue dynamique -->
   <section id="showcase" class="showcase">
-    <h2 class="section-title" data-i18n="showcase_title">Aktuelle Auswahl.</h2>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+      <h2 class="section-title" id="dynamic-title" data-i18n="showcase_title" style="margin-bottom: 0;">Aktuelle Auswahl.</h2>
+      <button id="btn-show-all" class="btn-show-all" onclick="filterCategory('all')" data-i18n="btn_show_all" style="display: none;">Alle anzeigen</button>
+    </div>
+    
     <div id="product-grid" class="product-grid">
       <p style="color: #555; text-align: center; width: 100%;">Produkte werden geladen...</p>
     </div>
