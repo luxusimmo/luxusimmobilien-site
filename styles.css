@@ -23,12 +23,12 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 [hidden] { display: none !important; }
 
-/* HEADER - Correction du z-index pour le menu */
+/* HEADER */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; /* Z-index élevé */
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 40px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); /* Assombrit le haut */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
 }
 .brand {
   font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: 2px;
@@ -67,9 +67,9 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-display); font-size: 30px; text-transform: uppercase; letter-spacing: 2px;
 }
 
-/* HERO & SLIDER */
+/* HERO - Hauteur réduite à 80vh */
 .hero {
-  position: relative; height: 100vh; display: flex; align-items: center; justify-content: center;
+  position: relative; height: 80vh; display: flex; align-items: center; justify-content: center;
   text-align: center; overflow: hidden;
 }
 .hero-slider {
@@ -77,8 +77,9 @@ a { color: inherit; text-decoration: none; }
 }
 .hero-slider .slide {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out;
-  filter: brightness(0.4) saturate(0.8);
+  object-fit: cover; object-position: center;
+  opacity: 0; transition: opacity 1.5s ease-in-out;
+  filter: brightness(0.45) saturate(0.9);
 }
 .hero-slider .slide.active {
   opacity: 1;
@@ -107,7 +108,7 @@ a { color: inherit; text-decoration: none; }
 .btn-scroll:hover { background: var(--text); color: var(--bg); }
 
 /* COLLECTIONS */
-.collections { padding: 120px 50px; }
+.collections { padding: 100px 50px; }
 .section-title {
   font-family: var(--font-display); font-size: clamp(32px, 4vw, 50px); font-weight: 500;
   margin-bottom: 60px; letter-spacing: -1px;
@@ -115,14 +116,16 @@ a { color: inherit; text-decoration: none; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } .collections { padding: 60px 20px; } .site-header { padding: 15px 20px; } }
 
+/* Cartes de catégories - Hauteur réduite à 450px */
 .category-card {
-  position: relative; height: 600px; border-radius: 4px; overflow: hidden; display: block;
+  position: relative; height: 450px; border-radius: 4px; overflow: hidden; display: block;
 }
 .category-card img {
-  width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+  filter: brightness(0.65);
   transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s;
 }
-.category-card:hover img { transform: scale(1.05); filter: brightness(0.8); }
+.category-card:hover img { transform: scale(1.05); filter: brightness(0.85); }
 .card-content {
   position: absolute; bottom: 0; left: 0; right: 0; padding: 40px;
   background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
