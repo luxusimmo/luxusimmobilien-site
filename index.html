@@ -15,7 +15,7 @@
   <a href="#" class="brand">LUXUSIMMOBILIEN</a>
   
   <div class="header-controls">
-    <!-- Bouton Langue (Globe) -->
+    <!-- Menu Langue -->
     <div class="lang-container">
       <button id="lang-btn" class="icon-btn" aria-label="Langue">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -28,25 +28,29 @@
       </div>
     </div>
 
-    <!-- Bouton Menu (Trois traits) -->
+    <!-- Menu Hamburger -->
     <button id="menu-btn" class="icon-btn" aria-label="Menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </header>
 
-<!-- Menu Mobile / Navigation -->
+<!-- Navigation Mobile -->
 <nav id="mobile-nav" class="mobile-nav" hidden>
-  <a href="#mobile-homes" data-i18n="nav_mobile">Mobile Homes</a>
-  <a href="#maritime" data-i18n="nav_maritime">Maritime</a>
-  <a href="#office" data-i18n="nav_office">Office</a>
+  <a href="#collections" data-i18n="nav_mobile">Mobile Homes</a>
+  <a href="#collections" data-i18n="nav_maritime">Maritime</a>
+  <a href="#collections" data-i18n="nav_office">Office</a>
   <a href="#impressum" data-i18n="nav_contact">Contact</a>
 </nav>
 
 <main>
-  <!-- Canvas 3D en arrière-plan du Hero -->
+  <!-- Diaporama d'images d'en-tête -->
   <section class="hero">
-    <canvas id="hero-canvas"></canvas>
+    <div class="hero-slider">
+      <!-- Remplacez ces liens par vos images locales : "hero-1.jpg" et "hero-2.jpg" -->
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" class="slide active" alt="Luxury Home">
+      <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=2500&auto=format&fit=crop" class="slide" alt="Mobile Home">
+    </div>
     <div class="hero-content">
       <span class="eyebrow" data-i18n="hero_eyebrow">Premium Living & Working</span>
       <h1 data-i18n-html="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
@@ -59,7 +63,9 @@
     <h2 class="section-title" data-i18n="collections_title">Unsere drei Säulen.</h2>
     
     <div class="grid-3">
+      <!-- Catégorie 1 -->
       <a href="#mobile-homes" class="category-card">
+        <!-- Remplacez par "cat-mobile.jpg" -->
         <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=1000&auto=format&fit=crop" alt="Mobile Home">
         <div class="card-content">
           <span class="num">01</span>
@@ -68,7 +74,9 @@
         </div>
       </a>
 
+      <!-- Catégorie 2 -->
       <a href="#maritime" class="category-card">
+        <!-- Remplacez par "cat-maritime.jpg" -->
         <img src="https://images.unsplash.com/photo-1586528116311-ad8ed7c508b0?q=80&w=1000&auto=format&fit=crop" alt="Maritime Container">
         <div class="card-content">
           <span class="num">02</span>
@@ -77,7 +85,9 @@
         </div>
       </a>
 
+      <!-- Catégorie 3 -->
       <a href="#office" class="category-card">
+        <!-- Remplacez par "cat-office.jpg" -->
         <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" alt="Office Container">
         <div class="card-content">
           <span class="num">03</span>
@@ -135,7 +145,6 @@
 <script type="module" src="supabase-config.js"></script>
 <script type="module" src="lang.js"></script>
 <script type="module" src="app.js"></script>
-<script type="module" src="three-bg.js"></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
