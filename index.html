@@ -13,28 +13,43 @@
 
 <header class="site-header">
   <a href="#" class="brand">LUXUSIMMOBILIEN</a>
-  <nav class="nav">
-    <a href="#mobile-homes" data-i18n="nav_mobile">Mobile Homes</a>
-    <a href="#maritime" data-i18n="nav_maritime">Maritime</a>
-    <a href="#office" data-i18n="nav_office">Office</a>
-    <a href="#impressum" data-i18n="nav_contact">Contact</a>
-  </nav>
-  <div class="lang-switcher">
-    <button class="lang-btn active" data-lang="de">DE</button>
-    <button class="lang-btn" data-lang="it">IT</button>
-    <button class="lang-btn" data-lang="fr">FR</button>
-    <button class="lang-btn" data-lang="en">EN</button>
+  
+  <div class="header-controls">
+    <!-- Bouton Langue (Globe) -->
+    <div class="lang-container">
+      <button id="lang-btn" class="icon-btn" aria-label="Langue">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
+      <div id="lang-menu" class="dropdown-menu" hidden>
+        <button class="lang-opt active" data-lang="de">Deutsch</button>
+        <button class="lang-opt" data-lang="it">Italiano</button>
+        <button class="lang-opt" data-lang="fr">Français</button>
+        <button class="lang-opt" data-lang="en">English</button>
+      </div>
+    </div>
+
+    <!-- Bouton Menu (Trois traits) -->
+    <button id="menu-btn" class="icon-btn" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </header>
 
+<!-- Menu Mobile / Navigation -->
+<nav id="mobile-nav" class="mobile-nav" hidden>
+  <a href="#mobile-homes" data-i18n="nav_mobile">Mobile Homes</a>
+  <a href="#maritime" data-i18n="nav_maritime">Maritime</a>
+  <a href="#office" data-i18n="nav_office">Office</a>
+  <a href="#impressum" data-i18n="nav_contact">Contact</a>
+</nav>
+
 <main>
+  <!-- Canvas 3D en arrière-plan du Hero -->
   <section class="hero">
-    <div class="hero-bg">
-      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2500&auto=format&fit=crop" alt="Luxury Real Estate">
-    </div>
+    <canvas id="hero-canvas"></canvas>
     <div class="hero-content">
       <span class="eyebrow" data-i18n="hero_eyebrow">Premium Living & Working</span>
-      <h1 data-i18n="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
+      <h1 data-i18n-html="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
       <p data-i18n="hero_subtitle">Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container.</p>
       <a href="#collections" class="btn-scroll" data-i18n="hero_scroll">Kollektionen entdecken</a>
     </div>
@@ -44,7 +59,6 @@
     <h2 class="section-title" data-i18n="collections_title">Unsere drei Säulen.</h2>
     
     <div class="grid-3">
-      <!-- Catégorie 1 -->
       <a href="#mobile-homes" class="category-card">
         <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=1000&auto=format&fit=crop" alt="Mobile Home">
         <div class="card-content">
@@ -54,9 +68,8 @@
         </div>
       </a>
 
-      <!-- Catégorie 2 -->
       <a href="#maritime" class="category-card">
-        <img src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1000&auto=format&fit=crop" alt="Maritime Container">
+        <img src="https://images.unsplash.com/photo-1586528116311-ad8ed7c508b0?q=80&w=1000&auto=format&fit=crop" alt="Maritime Container">
         <div class="card-content">
           <span class="num">02</span>
           <h3 data-i18n="cat_2_title">Maritime</h3>
@@ -64,7 +77,6 @@
         </div>
       </a>
 
-      <!-- Catégorie 3 -->
       <a href="#office" class="category-card">
         <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" alt="Office Container">
         <div class="card-content">
@@ -76,7 +88,6 @@
     </div>
   </section>
 
-  <!-- Section Catalogue dynamique (remplie par JS) -->
   <section id="showcase" class="showcase">
     <h2 class="section-title" data-i18n="showcase_title">Aktuelle Auswahl.</h2>
     <div id="product-grid" class="product-grid">
@@ -97,7 +108,7 @@
         LUXUSIMMOBILIEN GmbH<br>
         Max Mustermann Hauptstraße 42<br>
         10117 Berlin, DEUTSCHLAND<br>
-        Vertreten durch: FRANZ JOSEF EMBERFER
+        Vertreten durch: FRANZ JOSEF EMBERGER
       </p>
     </div>
     <div>
@@ -121,10 +132,10 @@
   </div>
 </footer>
 
-<!-- Configuration Supabase -->
 <script type="module" src="supabase-config.js"></script>
 <script type="module" src="lang.js"></script>
 <script type="module" src="app.js"></script>
+<script type="module" src="three-bg.js"></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
