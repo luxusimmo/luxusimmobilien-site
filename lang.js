@@ -10,7 +10,6 @@ function applyLanguage(lang) {
   const dict = translations[lang] || translations[DEFAULT_LANG];
   if (!dict) return;
 
-  // Utilisation de innerHTML pour supporter les balises <br>
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (dict[key] !== undefined) el.textContent = dict[key];
@@ -21,7 +20,6 @@ function applyLanguage(lang) {
     if (dict[key] !== undefined) el.innerHTML = dict[key];
   });
 
-  // Mise à jour de l'état actif dans le menu déroulant
   document.querySelectorAll('.lang-opt').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
@@ -30,54 +28,75 @@ function applyLanguage(lang) {
   document.documentElement.lang = lang;
 }
 
-(async function initLang() {
+// --- INITIALISATION ---
+document.addEventListener('DOMContentLoaded', async () => {
+  
+  // 1. CHARGEMENT DES LANGUES
   try {
     translations = await loadTranslations();
+    const saved = localStorage.getItem('luxus_site_lang');
+    const browserLang = (navigator.language || 'de').slice(0, 2);
+    const initial = saved || (['de', 'it', 'fr', 'en'].includes(browserLang) ? browserLang : DEFAULT_LANG);
+    
+    if (translations) applyLanguage(initial);
   } catch (err) {
-    console.error('Erreur chargement traductions :', err);
-    return;
+    console.error('Erreur traductions:', err);
   }
 
-  const saved = localStorage.getItem('luxus_site_lang');
-  const browserLang = (navigator.language || 'de').slice(0, 2);
-  const initial = saved || (['de', 'it', 'fr', 'en'].includes(browserLang) ? browserLang : DEFAULT_LANG);
-
-  applyLanguage(initial);
-
-  // Écouteurs sur les boutons de langue
-  document.querySelectorAll('.lang-opt').forEach(btn => {
-    btn.addEventListener('click', () => {
-      applyLanguage(btn.dataset.lang);
-      document.getElementById('lang-menu').hidden = true; // Ferme le menu après sélection
-    });
-  });
-
-  // Gestion de l'ouverture/fermeture du menu déroulant de langue
+  // 2. GESTION DU MENU DES LANGUES
   const langBtn = document.getElementById('lang-btn');
   const langMenu = document.getElementById('lang-menu');
-  langBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    langMenu.hidden = !langMenu.hidden;
-  });
+  
+  if (langBtn && langMenu) {
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langMenu.hidden = !langMenu.hidden;
+    });
 
-  // Fermer le menu si on clique ailleurs
-  document.addEventListener('click', (e) => {
-    if (!langMenu.hidden && !langMenu.contains(e.target) && e.target !== langBtn) {
-      langMenu.hidden = true;
-    }
-  });
+    // Sélection de la langue
+    document.querySelectorAll('.lang-opt').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        applyLanguage(e.target.dataset.lang);
+        langMenu.hidden = true;
+      });
+    });
 
-  // Gestion du menu Hamburger (Mobile)
+    // Fermer le menu si on clique ailleurs
+    document.addEventListener('click', (e) => {
+      if (!langMenu.hidden && !langMenu.contains(e.target) && e.target !== langBtn) {
+        langMenu.hidden = true;
+      }
+    });
+  }
+
+  // 3. GESTION DU MENU HAMBURGER
   const menuBtn = document.getElementById('menu-btn');
   const mobileNav = document.getElementById('mobile-nav');
-  menuBtn.addEventListener('click', () => {
-    mobileNav.hidden = !mobileNav.hidden;
-  });
 
-  // Fermer le menu mobile au clic sur un lien
-  document.querySelectorAll('.mobile-nav a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.hidden = true;
+  if (menuBtn && mobileNav) {
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileNav.hidden = !mobileNav.hidden;
     });
-  });
-})();
+
+    // Fermer au clic sur un lien
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.hidden = true;
+      });
+    });
+  }
+
+  // 4. DIAPORAMA (SLIDER) DE L'EN-TÊTE
+  const slides = document.querySelectorAll('.hero-slider .slide');
+  if (slides.length > 1) {
+    let currentSlide = 0;
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 4000); // Change d'image toutes les 4 secondes
+  }
+
+});
