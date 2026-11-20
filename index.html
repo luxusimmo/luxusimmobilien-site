@@ -12,10 +12,9 @@
 <body>
 
 <header class="site-header">
-  <a href="#" class="brand">LUXUSIMMOBILIEN</a>
+  <a href="#" class="brand" onclick="showView('home')">LUXUSIMMOBILIEN</a>
   
   <div class="header-controls">
-    <!-- Menu Langue -->
     <div class="lang-container">
       <button id="lang-btn" class="icon-btn" aria-label="Langue">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -27,115 +26,127 @@
         <button class="lang-opt" data-lang="en">English</button>
       </div>
     </div>
-
-    <!-- Menu Hamburger -->
     <button id="menu-btn" class="icon-btn" aria-label="Menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
 </header>
 
-<!-- Navigation Mobile -->
 <nav id="mobile-nav" class="mobile-nav" hidden>
-  <a href="#showcase" onclick="filterCategory('mobile_home')" data-i18n="nav_mobile">Mobile Homes</a>
-  <a href="#showcase" onclick="filterCategory('maritime')" data-i18n="nav_maritime">Maritime</a>
-  <a href="#showcase" onclick="filterCategory('office')" data-i18n="nav_office">Office</a>
-  <a href="#impressum" data-i18n="nav_contact">Contact</a>
+  <a href="#" onclick="showCategory('mobile_home')" data-i18n="nav_mobile">Mobile Homes</a>
+  <a href="#" onclick="showCategory('maritime')" data-i18n="nav_maritime">Maritime</a>
+  <a href="#" onclick="showCategory('office')" data-i18n="nav_office">Office</a>
+  <a href="#" onclick="showView('home'); document.getElementById('impressum').scrollIntoView();" data-i18n="nav_contact">Contact</a>
 </nav>
 
 <main>
-  <!-- Diaporama d'images d'en-tête -->
-  <section class="hero">
-    <div class="hero-slider">
-      <img src="hero-1.jpeg" class="slide active" alt="Luxury Home">
-      <img src="hero-2.jpeg" class="slide" alt="Mobile Home">
-    </div>
-    <div class="hero-content">
-      <span class="eyebrow" data-i18n="hero_eyebrow">Premium Living & Working</span>
-      <h1 data-i18n-html="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
-      <p data-i18n="hero_subtitle">Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container.</p>
-      <a href="#collections" class="btn-scroll" data-i18n="hero_scroll">Kollektionen entdecken</a>
-    </div>
-  </section>
+  <!-- ================= VUE 1 : ACCUEIL ================= -->
+  <div id="view-home">
+    <section class="hero">
+      <div class="hero-slider">
+        <img src="hero-1.jpeg" class="slide active" alt="Luxury Home">
+        <img src="hero-2.jpeg" class="slide" alt="Mobile Home">
+      </div>
+      <div class="hero-content">
+        <span class="eyebrow" data-i18n="hero_eyebrow">Premium Living & Working</span>
+        <h1 data-i18n-html="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
+        <p data-i18n="hero_subtitle">Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container.</p>
+        <a href="#collections" class="btn-scroll" data-i18n="hero_scroll">Kollektionen entdecken</a>
+      </div>
+    </section>
 
-  <section id="collections" class="collections">
-    <h2 class="section-title" data-i18n="collections_title">Unsere drei Säulen.</h2>
-    
-    <div class="grid-3">
-      <!-- Catégorie 1 -->
-      <div class="category-card" onclick="filterCategory('mobile_home')" style="cursor: pointer;">
-        <img src="cat-mobile.jpeg" alt="Mobile Home">
-        <div class="card-content">
-          <span class="num">01</span>
-          <h3 data-i18n="cat_1_title">Mobile Homes</h3>
-          <p data-i18n="cat_1_desc">Modulares Wohnen auf höchstem Niveau.</p>
+    <section id="collections" class="collections">
+      <h2 class="section-title" data-i18n="collections_title">Unsere drei Säulen.</h2>
+      <div class="grid-3">
+        <div class="category-card" onclick="showCategory('mobile_home')">
+          <img src="cat-mobile.jpeg" alt="Mobile Home">
+          <div class="card-content">
+            <span class="num">01</span>
+            <h3 data-i18n="cat_1_title">Mobile Homes</h3>
+            <p data-i18n="cat_1_desc">Modulares Wohnen auf höchstem Niveau.</p>
+          </div>
+        </div>
+        <div class="category-card" onclick="showCategory('maritime')">
+          <img src="cat-maritime.jpeg" alt="Maritime Container">
+          <div class="card-content">
+            <span class="num">02</span>
+            <h3 data-i18n="cat_2_title">Maritime</h3>
+            <p data-i18n="cat_2_desc">Robuste Schiffscontainer für einzigartige Projekte.</p>
+          </div>
+        </div>
+        <div class="category-card" onclick="showCategory('office')">
+          <img src="cat-office.jpeg" alt="Office Container">
+          <div class="card-content">
+            <span class="num">03</span>
+            <h3 data-i18n="cat_3_title">Office</h3>
+            <p data-i18n="cat_3_desc">Flexible Arbeitsräume, sofort einsatzbereit.</p>
+          </div>
         </div>
       </div>
+    </section>
+  </div>
 
-      <!-- Catégorie 2 -->
-      <div class="category-card" onclick="filterCategory('maritime')" style="cursor: pointer;">
-        <img src="cat-maritime.jpeg" alt="Maritime Container">
-        <div class="card-content">
-          <span class="num">02</span>
-          <h3 data-i18n="cat_2_title">Maritime</h3>
-          <p data-i18n="cat_2_desc">Robuste Schiffscontainer für einzigartige Projekte.</p>
+  <!-- ================= VUE 2 : CATÉGORIE ================= -->
+  <div id="view-category" class="page-view" hidden>
+    <div class="container">
+      <button class="btn-back" onclick="showView('home')">← <span data-i18n="back_home">Zurück zur Startseite</span></button>
+      <h1 class="page-title" id="category-title">Kategorie</h1>
+      <div id="category-grid" class="product-grid"></div>
+    </div>
+  </div>
+
+  <!-- ================= VUE 3 : PRODUIT DÉTAILLÉ ================= -->
+  <div id="view-product" class="page-view" hidden>
+    <div class="container">
+      <button class="btn-back" onclick="history.back()">← <span data-i18n="back_list">Zurück zur Liste</span></button>
+      
+      <div class="product-detail-layout">
+        <!-- Colonne Gauche : Images -->
+        <div class="product-detail-images">
+          <img id="detail-main-img" src="" alt="Product" class="main-img">
+          <div id="detail-thumbnails" class="thumbnails"></div>
+        </div>
+        
+        <!-- Colonne Droite : Informations -->
+        <div class="product-detail-info">
+          <span class="badge-category" id="detail-category"></span>
+          <h1 id="detail-title"></h1>
+          <p class="detail-subtitle" id="detail-year"></p>
+          <h2 class="detail-price" id="detail-price"></h2>
+          
+          <div class="specs-box" id="detail-specs"></div>
+          
+          <div class="detail-description">
+            <h3 data-i18n="desc_title">Beschreibung</h3>
+            <p id="detail-desc"></p>
+          </div>
+
+          <a href="#" target="_blank" class="btn-whatsapp-detail" id="detail-whatsapp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <span data-i18n="contact_us">Kontaktieren Sie uns</span>
+          </a>
         </div>
       </div>
-
-      <!-- Catégorie 3 -->
-      <div class="category-card" onclick="filterCategory('office')" style="cursor: pointer;">
-        <img src="cat-office.jpeg" alt="Office Container">
-        <div class="card-content">
-          <span class="num">03</span>
-          <h3 data-i18n="cat_3_title">Office</h3>
-          <p data-i18n="cat_3_desc">Flexible Arbeitsräume, sofort einsatzbereit.</p>
-        </div>
-      </div>
     </div>
-  </section>
-
-  <!-- Section Catalogue dynamique -->
-  <section id="showcase" class="showcase">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
-      <h2 class="section-title" id="dynamic-title" data-i18n="showcase_title" style="margin-bottom: 0;">Aktuelle Auswahl.</h2>
-      <button id="btn-show-all" class="btn-show-all" onclick="filterCategory('all')" data-i18n="btn_show_all" style="display: none;">Alle anzeigen</button>
-    </div>
-    
-    <div id="product-grid" class="product-grid">
-      <p style="color: #555; text-align: center; width: 100%;">Produkte werden geladen...</p>
-    </div>
-  </section>
-
+  </div>
 </main>
 
 <footer id="impressum" class="site-footer">
   <div class="footer-top">
-    <h2 class="footer-logo">LUXUSIMMOBILIEN</h2>
+    <h2 class="footer-logo" onclick="showView('home')" style="cursor:pointer;">LUXUSIMMOBILIEN</h2>
   </div>
   <div class="footer-grid">
     <div>
       <h4 data-i18n="footer_legal">Impressum</h4>
-      <p>
-        LUXUSIMMOBILIEN GmbH<br>
-        Max Mustermann Hauptstraße 42<br>
-        10117 Berlin, DEUTSCHLAND<br>
-        Vertreten durch: FRANZ JOSEF EMBERGER
-      </p>
+      <p>LUXUSIMMOBILIEN GmbH<br>Max Mustermann Hauptstraße 42<br>10117 Berlin, DEUTSCHLAND<br>Vertreten durch: FRANZ JOSEF EMBERGER</p>
     </div>
     <div>
       <h4 data-i18n="footer_registry">Registereintrag</h4>
-      <p>
-        Amtsgericht Charlottenburg<br>
-        HRB 972025 B<br>
-        USt-IdNr: DE305687569
-      </p>
+      <p>Amtsgericht Charlottenburg<br>HRB 972025 B<br>USt-IdNr: DE305687569</p>
     </div>
     <div>
       <h4 data-i18n="footer_contact">Kontakt</h4>
-      <p>
-        E-Mail: luxusimmobilien@inbox.eu<br>
-        Tel / WhatsApp: (+49) 178 406 5141
-      </p>
+      <p>E-Mail: luxusimmobilien@inbox.eu<br>Tel / WhatsApp: (+49) 178 406 5141</p>
     </div>
   </div>
   <div class="footer-bottom">
