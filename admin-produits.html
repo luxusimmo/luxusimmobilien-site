@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LUXUSIMMOBILIEN — Admin Produits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Styles spécifiques à l'admin */
+  body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; padding-top: 100px; }
+  .admin-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+  .admin-box { background: #111; border: 1px solid #222; border-radius: 8px; padding: 30px; margin-bottom: 30px; }
+  .admin-box h2 { font-family: 'Space Grotesk', sans-serif; margin-bottom: 20px; font-size: 24px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-size: 13px; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px; background: #050505; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: inherit;
+  }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: #fff; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .btn-submit { background: #fff; color: #000; border: none; padding: 15px 30px; font-weight: 600; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.3s; }
+  .btn-submit:hover { background: #ccc; }
+  
+  /* Liste des produits */
+  .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
+  .product-list-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; margin-right: 15px; }
+  .product-info { flex: 1; }
+  .product-info h4 { margin: 0 0 5px 0; font-size: 16px; }
+  .product-info p { margin: 0; font-size: 13px; color: #888; }
+  .btn-delete { background: none; border: 1px solid #ff4444; color: #ff4444; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+  .btn-delete:hover { background: #ff4444; color: #fff; }
+  
+  .login-view { max-width: 400px; margin: 15vh auto; background: #111; padding: 40px; border-radius: 8px; border: 1px solid #222; }
+  .login-view h2 { text-align: center; margin-bottom: 20px; font-family: 'Space Grotesk'; }
+</style>
+</head>
+<body>
+
+<!-- Vue Connexion -->
+<div id="login-view" class="login-view">
+  <h2>Espace Admin</h2>
+  <div class="form-group">
+    <input type="email" id="email" placeholder="E-mail" required />
+  </div>
+  <div class="form-group">
+    <input type="password" id="password" placeholder="Mot de passe" required />
+  </div>
+  <button class="btn-submit" onclick="login()">Se connecter</button>
+</div>
+
+<!-- Vue Admin -->
+<div id="admin-view" class="admin-container" style="display: none;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h2 style="font-family: 'Space Grotesk'; margin: 0;">Gestion des Produits</h2>
+    <button class="btn-delete" onclick="logout()">Déconnexion</button>
+  </div>
+
+  <!-- Formulaire d'ajout -->
+  <div class="admin-box">
+    <h2>Ajouter un nouveau produit</h2>
+    <form id="add-product-form">
+      <div class="form-group">
+        <label>Titre du produit</label>
+        <input type="text" id="p-title" required placeholder="Ex: Maison Mobile Premium 2024" />
+      </div>
+      <div class="form-group">
+        <label>Catégorie</label>
+        <select id="p-category" required>
+          <option value="mobile_home">Maison Mobile</option>
+          <option value="maritime">Conteneur Maritime</option>
+          <option value="office">Conteneur Bureau</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Prix (€)</label>
+          <input type="number" id="p-price" required placeholder="45000" />
+        </div>
+        <div class="form-group">
+          <label>Superficie (m²)</label>
+          <input type="text" id="p-surface" required placeholder="45 m²" />
+        </div>
+        <div class="form-group">
+          <label>État</label>
+          <select id="p-condition">
+            <option value="Neuf">Neuf</option>
+            <option value="Occasion">Occasion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Année</label>
+          <input type="number" id="p-year" required placeholder="2024" />
+        </div>
+        <div class="form-group">
+          <label>Longueur</label>
+          <input type="text" id="p-length" placeholder="12m" />
+        </div>
+        <div class="form-group">
+          <label>Largeur</label>
+          <input type="text" id="p-width" placeholder="3m" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description (Optionnel)</label>
+        <textarea id="p-description" rows="3" placeholder="Description détaillée..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Photo du produit (JPG/PNG)</label>
+        <input type="file" id="p-image" accept="image/*" required />
+      </div>
+      <button type="submit" class="btn-submit">Ajouter le produit</button>
+      <p id="status-msg" style="text-align: center; margin-top: 15px; font-size: 14px;"></p>
+    </form>
+  </div>
+
+  <!-- Liste des produits existants -->
+  <div class="admin-box">
+    <h2>Vos produits en ligne</h2>
+    <div id="products-list">
+      Chargement...
+    </div>
+  </div>
+</div>
+
+<script type="module" src="admin-produits.js"></script>
+</body>
+</html>
