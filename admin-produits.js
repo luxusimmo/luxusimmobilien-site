@@ -39,42 +39,53 @@ async function checkSession() {
 }
 checkSession();
 
-// --- AJOUTER UN PRODUIT ---
+// --- AJOUTER UN PRODUIT (MULTI-PHOTOS) ---
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = form.querySelector('button[type="submit"]');
   btn.disabled = true;
-  statusMsg.textContent = "Envoi de la photo et des données...";
+  statusMsg.textContent = "Envoi des photos et des données... (patientez)";
   statusMsg.style.color = "#aaa";
 
   try {
-    const file = document.getElementById('p-image').files[0];
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `produits/${fileName}`;
+    const files = document.getElementById('p-images').files;
+    if (files.length === 0) throw new Error("Veuillez sélectionner au moins une photo.");
+    
+    const uploadedUrls = [];
 
-    // 1. Upload de l'image dans le bucket product-images
-    const { error: uploadError } = await supabase.storage
-      .from('product-images')
-      .upload(filePath, file);
+    // 1. Upload de toutes les images
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${i}.${fileExt}`;
+      const filePath = `produits/${fileName}`;
 
-    if (uploadError) throw uploadError;
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file);
 
-    // 2. Récupérer l'URL publique de l'image
-    const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(filePath);
+      if (uploadError) throw uploadError;
 
-    // 3. Insérer dans la base de données
+      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(filePath);
+      uploadedUrls.push(urlData.publicUrl);
+    }
+
+    // 2. Insérer dans la base de données (la 1ère photo sert de couverture)
+    const priceValue = document.getElementById('p-price').value;
+    const yearValue = document.getElementById('p-year').value;
+
     const { error: dbError } = await supabase.from('products').insert([{
       category: document.getElementById('p-category').value,
       title: document.getElementById('p-title').value,
       description: document.getElementById('p-description').value,
-      price: parseFloat(document.getElementById('p-price').value),
+      price: priceValue ? parseFloat(priceValue) : null,
       surface: document.getElementById('p-surface').value,
       condition: document.getElementById('p-condition').value,
-      year: parseInt(document.getElementById('p-year').value),
+      year: yearValue ? parseInt(yearValue) : null,
       length: document.getElementById('p-length').value,
       width: document.getElementById('p-width').value,
-      image_url: urlData.publicUrl
+      image_url: uploadedUrls[0], // Photo de couverture
+      gallery_urls: uploadedUrls  // Tableau de toutes les photos
     }]);
 
     if (dbError) throw dbError;
@@ -108,7 +119,7 @@ async function loadProducts() {
       <img src="${p.image_url}" alt="${p.title}">
       <div class="product-info">
         <h4>${p.title}</h4>
-        <p>${p.price} € · ${p.category} · ${p.condition}</p>
+        <p>${p.price ? p.price + ' €' : 'Prix non défini'} · ${p.category} · ${p.condition} · ${p.gallery_urls ? p.gallery_urls.length : 1} photo(s)</p>
       </div>
       <button class="btn-delete" onclick="deleteProduct('${p.id}')">Supprimer</button>
     </div>
