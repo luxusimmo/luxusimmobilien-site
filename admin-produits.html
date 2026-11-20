@@ -70,7 +70,6 @@
     <button class="btn-delete" onclick="logout()">Déconnexion</button>
   </div>
 
-  <!-- Formulaire d'ajout / modification -->
   <div class="admin-box">
     <h2 id="form-title">Ajouter un nouveau produit</h2>
     <form id="add-product-form">
@@ -83,47 +82,20 @@
       </div>
 
       <div id="tab-de" class="lang-content active">
-        <div class="form-group">
-          <label>Titre du produit (DE)</label>
-          <input type="text" id="p-title-de" required placeholder="Ex: Luxus Mobilheim 2024" />
-        </div>
-        <div class="form-group">
-          <label>Description (DE)</label>
-          <textarea id="p-desc-de" rows="3" placeholder="Beschreibung..."></textarea>
-        </div>
+        <div class="form-group"><label>Titre du produit (DE)</label><input type="text" id="p-title-de" required placeholder="Ex: Luxus Mobilheim 2024" /></div>
+        <div class="form-group"><label>Description (DE)</label><textarea id="p-desc-de" rows="3" placeholder="Beschreibung..."></textarea></div>
       </div>
-
       <div id="tab-fr" class="lang-content">
-        <div class="form-group">
-          <label>Titre du produit (FR)</label>
-          <input type="text" id="p-title-fr" placeholder="Ex: Maison Mobile de Luxe 2024" />
-        </div>
-        <div class="form-group">
-          <label>Description (FR)</label>
-          <textarea id="p-desc-fr" rows="3" placeholder="Description..."></textarea>
-        </div>
+        <div class="form-group"><label>Titre du produit (FR)</label><input type="text" id="p-title-fr" placeholder="Ex: Maison Mobile de Luxe 2024" /></div>
+        <div class="form-group"><label>Description (FR)</label><textarea id="p-desc-fr" rows="3" placeholder="Description..."></textarea></div>
       </div>
-
       <div id="tab-it" class="lang-content">
-        <div class="form-group">
-          <label>Titre du produit (IT)</label>
-          <input type="text" id="p-title-it" placeholder="Ex: Casa Mobile di Lusso 2024" />
-        </div>
-        <div class="form-group">
-          <label>Description (IT)</label>
-          <textarea id="p-desc-it" rows="3" placeholder="Descrizione..."></textarea>
-        </div>
+        <div class="form-group"><label>Titre du produit (IT)</label><input type="text" id="p-title-it" placeholder="Ex: Casa Mobile di Lusso 2024" /></div>
+        <div class="form-group"><label>Description (IT)</label><textarea id="p-desc-it" rows="3" placeholder="Descrizione..."></textarea></div>
       </div>
-
       <div id="tab-en" class="lang-content">
-        <div class="form-group">
-          <label>Titre du produit (EN)</label>
-          <input type="text" id="p-title-en" placeholder="Ex: Luxury Mobile Home 2024" />
-        </div>
-        <div class="form-group">
-          <label>Description (EN)</label>
-          <textarea id="p-desc-en" rows="3" placeholder="Description..."></textarea>
-        </div>
+        <div class="form-group"><label>Titre du produit (EN)</label><input type="text" id="p-title-en" placeholder="Ex: Luxury Mobile Home 2024" /></div>
+        <div class="form-group"><label>Description (EN)</label><textarea id="p-desc-en" rows="3" placeholder="Description..."></textarea></div>
       </div>
 
       <hr style="border-color: #333; margin: 30px 0;">
@@ -137,39 +109,25 @@
         </select>
       </div>
       <div class="grid-2">
-        <div class="form-group">
-          <label>Prix (€)</label>
-          <input type="number" id="p-price" placeholder="45000" />
-        </div>
-        <div class="form-group">
-          <label>Superficie (m²)</label>
-          <input type="text" id="p-surface" required placeholder="45 m²" />
-        </div>
+        <div class="form-group"><label>Prix (€)</label><input type="number" id="p-price" placeholder="45000" /></div>
+        <div class="form-group"><label>Superficie (m²)</label><input type="text" id="p-surface" required placeholder="45 m²" /></div>
         <div class="form-group">
           <label>État</label>
-          <select id="p-condition">
-            <option value="Neuf">Neuf</option>
-            <option value="Occasion">Occasion</option>
-          </select>
+          <select id="p-condition"><option value="Neuf">Neuf</option><option value="Occasion">Occasion</option></select>
         </div>
-        <div class="form-group">
-          <label>Année</label>
-          <input type="number" id="p-year" required placeholder="2024" />
-        </div>
-        <div class="form-group">
-          <label>Longueur</label>
-          <input type="text" id="p-length" placeholder="12m" />
-        </div>
-        <div class="form-group">
-          <label>Largeur</label>
-          <input type="text" id="p-width" placeholder="3m" />
-        </div>
+        <div class="form-group"><label>Année</label><input type="number" id="p-year" required placeholder="2024" /></div>
+        <div class="form-group"><label>Longueur</label><input type="text" id="p-length" placeholder="12m" /></div>
+        <div class="form-group"><label>Largeur</label><input type="text" id="p-width" placeholder="3m" /></div>
       </div>
       
       <div class="form-group" style="margin-top: 20px;">
-        <label>Photos du produit (Laissez vide pour garder les anciennes lors d'une modification)</label>
+        <label>Photos du produit</label>
         <input type="file" id="p-images" accept="image/*" multiple />
+        <p style="font-size: 12px; color: #888; margin-top: 5px;">La 1ère photo servira de couverture.</p>
       </div>
+
+      <!-- ZONE DE PRÉVISUALISATION POUR L'ORDRE -->
+      <div id="image-preview-container" class="image-preview-container"></div>
 
       <button type="submit" id="btn-submit-form" class="btn-submit">Ajouter le produit</button>
       <button type="button" id="btn-cancel-edit" class="btn-cancel" onclick="resetForm()">Annuler la modification</button>
