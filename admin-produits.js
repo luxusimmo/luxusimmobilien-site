@@ -11,9 +11,10 @@ const statusMsg = document.getElementById('status-msg');
 const formTitle = document.getElementById('form-title');
 const btnSubmitForm = document.getElementById('btn-submit-form');
 const btnCancelEdit = document.getElementById('btn-cancel-edit');
+const previewContainer = document.getElementById('image-preview-container');
 
-let editingProductId = null; // Stocke l'ID si on est en mode édition
-let currentEditingGallery = []; // Stocke les photos existantes
+let editingProductId = null;
+let productImages = []; // Tableau qui stocke { file: File|null, url: string }
 
 // --- GESTION DES ONGLETS ---
 window.switchTab = function(lang) {
@@ -28,14 +29,10 @@ window.login = async function() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) alert("Erreur de connexion: " + error.message);
+  if (error) alert("Erreur: " + error.message);
   else checkSession();
 }
-
-window.logout = async function() {
-  await supabase.auth.signOut();
-  checkSession();
-}
+window.logout = async function() { await supabase.auth.signOut(); checkSession(); }
 
 async function checkSession() {
   const { data: { session } } = await supabase.auth.getSession();
@@ -50,46 +47,89 @@ async function checkSession() {
 }
 checkSession();
 
-// --- AJOUTER OU MODIFIER UN PRODUIT ---
+// --- GESTION DES IMAGES ET DE L'ORDRE ---
+document.getElementById('p-images').addEventListener('change', (e) => {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    productImages.push({ file: file, url: URL.createObjectURL(file) });
+  });
+  renderImagePreviews();
+  e.target.value = ''; // Reset input
+});
+
+function renderImagePreviews() {
+  if (productImages.length === 0) {
+    previewContainer.innerHTML = '';
+    return;
+  }
+
+  previewContainer.innerHTML = productImages.map((img, index) => `
+    <div class="preview-item">
+      ${index === 0 ? '<span class="cover-badge">Couverture</span>' : ''}
+      <img src="${img.url}" alt="preview">
+      <div class="preview-actions">
+        <button type="button" onclick="moveImage(${index}, -1)" ${index === 0 ? 'disabled' : ''}>⬆️</button>
+        <button type="button" onclick="moveImage(${index}, 1)" ${index === productImages.length - 1 ? 'disabled' : ''}>⬇️</button>
+        <button type="button" class="btn-del-img" onclick="removeImage(${index})">❌</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.moveImage = function(index, direction) {
+  if (direction === -1 && index > 0) {
+    [productImages[index - 1], productImages[index]] = [productImages[index], productImages[index - 1]];
+  } else if (direction === 1 && index < productImages.length - 1) {
+    [productImages[index + 1], productImages[index]] = [productImages[index], productImages[index + 1]];
+  }
+  renderImagePreviews();
+}
+
+window.removeImage = function(index) {
+  productImages.splice(index, 1);
+  renderImagePreviews();
+}
+
+// --- AJOUTER / MODIFIER ---
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = btnSubmitForm;
   btn.disabled = true;
-  statusMsg.textContent = "Traitement en cours... (patientez)";
+  statusMsg.textContent = "Traitement en cours...";
   statusMsg.style.color = "#aaa";
 
   try {
-    const files = document.getElementById('p-images').files;
-    let uploadedUrls = [];
-
-    // Si on ajoute un nouveau produit, les photos sont obligatoires
-    if (!editingProductId && files.length === 0) {
-      throw new Error("Veuillez sélectionner au moins une photo pour un nouveau produit.");
+    if (productImages.length === 0) {
+      throw new Error("Veuillez ajouter au moins une photo.");
     }
 
-    // 1. Upload des nouvelles images (si sélectionnées)
-    if (files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${i}.${fileExt}`;
-        const filePath = `produits/${fileName}`;
+    const finalUrls = [];
 
-        const { error: uploadError } = await supabase.storage
-          .from('product-images')
-          .upload(filePath, file);
-
-        if (uploadError) throw uploadError;
-
-        const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(filePath);
-        uploadedUrls.push(urlData.publicUrl);
+    // Upload séquentiel dans l'ordre défini
+    for (let i = 0; i < productImages.length; i++) {
+      const img = productImages[i];
+      
+      // Si l'image a déjà été uploadée (mode édition), on garde son URL
+      if (!img.file) {
+        finalUrls.push(img.url);
+        continue;
       }
+
+      // Sinon on l'upload
+      const fileExt = img.file.name.split('.').pop();
+      const fileName = `${Date.now()}_${i}.${fileExt}`;
+      const filePath = `produits/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage.from('product-images').upload(filePath, img.file);
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(filePath);
+      finalUrls.push(urlData.publicUrl);
     }
 
     const priceValue = document.getElementById('p-price').value;
     const yearValue = document.getElementById('p-year').value;
 
-    // Préparation des données communes
     const productData = {
       category: document.getElementById('p-category').value,
       price: priceValue ? parseFloat(priceValue) : null,
@@ -98,43 +138,28 @@ form.addEventListener('submit', async (e) => {
       year: yearValue ? parseInt(yearValue) : null,
       length: document.getElementById('p-length').value,
       width: document.getElementById('p-width').value,
-      
       title: document.getElementById('p-title-de').value,
       title_de: document.getElementById('p-title-de').value,
       title_fr: document.getElementById('p-title-fr').value,
       title_it: document.getElementById('p-title-it').value,
       title_en: document.getElementById('p-title-en').value,
-      
       description: document.getElementById('p-desc-de').value,
       description_de: document.getElementById('p-desc-de').value,
       description_fr: document.getElementById('p-desc-fr').value,
       description_it: document.getElementById('p-desc-it').value,
-      description_en: document.getElementById('p-desc-en').value
+      description_en: document.getElementById('p-desc-en').value,
+      image_url: finalUrls[0], // La 1ère du tableau
+      gallery_urls: finalUrls  // Tout le tableau
     };
 
-    // Si on a uploadé de nouvelles photos, on met à jour la galerie
-    if (uploadedUrls.length > 0) {
-      productData.image_url = uploadedUrls[0];
-      productData.gallery_urls = uploadedUrls;
-    }
-
     if (editingProductId) {
-      // MODE MODIFICATION
-      const { error: dbError } = await supabase
-        .from('products')
-        .update(productData)
-        .eq('id', editingProductId);
-      
+      const { error: dbError } = await supabase.from('products').update(productData).eq('id', editingProductId);
       if (dbError) throw dbError;
-      statusMsg.textContent = "Produit mis à jour avec succès !";
+      statusMsg.textContent = "Produit mis à jour !";
     } else {
-      // MODE AJOUT
-      const { error: dbError } = await supabase
-        .from('products')
-        .insert([productData]);
-      
+      const { error: dbError } = await supabase.from('products').insert([productData]);
       if (dbError) throw dbError;
-      statusMsg.textContent = "Produit ajouté avec succès !";
+      statusMsg.textContent = "Produit ajouté !";
     }
 
     statusMsg.style.color = "#4ade80";
@@ -150,13 +175,13 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// --- CHARGER LA LISTE DES PRODUITS ---
+// --- CHARGER LA LISTE ---
 async function loadProducts() {
   const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-  if (error) { productsList.innerHTML = "Erreur de chargement."; return; }
+  if (error) { productsList.innerHTML = "Erreur."; return; }
 
   if (data.length === 0) {
-    productsList.innerHTML = "<p style='color:#888'>Aucun produit pour le moment.</p>";
+    productsList.innerHTML = "<p style='color:#888'>Aucun produit.</p>";
     return;
   }
 
@@ -178,23 +203,20 @@ async function loadProducts() {
 // --- MODIFIER UN PRODUIT ---
 window.editProduct = async function(id) {
   const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
-  if (error) return alert("Erreur lors du chargement du produit.");
+  if (error) return alert("Erreur de chargement.");
 
   const p = data;
   editingProductId = p.id;
-  currentEditingGallery = p.gallery_urls || [p.image_url];
 
-  // Remplir le formulaire
+  // Remplir les champs textes
   document.getElementById('p-title-de').value = p.title_de || p.title || '';
   document.getElementById('p-title-fr').value = p.title_fr || '';
   document.getElementById('p-title-it').value = p.title_it || '';
   document.getElementById('p-title-en').value = p.title_en || '';
-
   document.getElementById('p-desc-de').value = p.description_de || p.description || '';
   document.getElementById('p-desc-fr').value = p.description_fr || '';
   document.getElementById('p-desc-it').value = p.description_it || '';
   document.getElementById('p-desc-en').value = p.description_en || '';
-
   document.getElementById('p-category').value = p.category || 'mobile_home';
   document.getElementById('p-price').value = p.price || '';
   document.getElementById('p-surface').value = p.surface || '';
@@ -203,29 +225,34 @@ window.editProduct = async function(id) {
   document.getElementById('p-length').value = p.length || '';
   document.getElementById('p-width').value = p.width || '';
 
-  // Changer l'interface du formulaire
+  // Charger les images existantes
+  const existingImages = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls : [p.image_url];
+  productImages = existingImages.map(url => ({ file: null, url: url }));
+  renderImagePreviews();
+
+  // Changer l'UI
   formTitle.textContent = "Modifier le produit";
   btnSubmitForm.textContent = "Mettre à jour le produit";
   btnCancelEdit.style.display = 'block';
-  
-  // Remonter au formulaire en douceur
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --- RÉINITIALISER LE FORMULAIRE ---
+// --- RÉINITIALISER ---
 window.resetForm = function() {
   editingProductId = null;
   form.reset();
+  productImages = [];
+  renderImagePreviews();
   formTitle.textContent = "Ajouter un nouveau produit";
   btnSubmitForm.textContent = "Ajouter le produit";
   btnCancelEdit.style.display = 'none';
   statusMsg.textContent = "";
 }
 
-// --- SUPPRIMER UN PRODUIT ---
+// --- SUPPRIMER ---
 window.deleteProduct = async function(id) {
   if (!confirm("Voulez-vous vraiment supprimer ce produit ?")) return;
   const { error } = await supabase.from('products').delete().eq('id', id);
-  if (error) alert("Erreur de suppression");
+  if (error) alert("Erreur.");
   else loadProducts();
 }
