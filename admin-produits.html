@@ -11,7 +11,7 @@
 <style>
   /* Styles spécifiques à l'admin */
   body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; padding-top: 100px; }
-  .admin-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+  .admin-container { max-width: 900px; margin: 0 auto; padding: 20px; }
   .admin-box { background: #111; border: 1px solid #222; border-radius: 8px; padding: 30px; margin-bottom: 30px; }
   .admin-box h2 { font-family: 'Space Grotesk', sans-serif; margin-bottom: 20px; font-size: 24px; }
   .form-group { margin-bottom: 15px; }
@@ -21,9 +21,17 @@
   }
   .form-group input:focus, .form-group select:focus { outline: none; border-color: #fff; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-  .btn-submit { background: #fff; color: #000; border: none; padding: 15px 30px; font-weight: 600; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.3s; }
+  .btn-submit { background: #fff; color: #000; border: none; padding: 15px 30px; font-weight: 600; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.3s; margin-top: 20px; }
   .btn-submit:hover { background: #ccc; }
   
+  /* Onglets de langue */
+  .lang-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; flex-wrap: wrap; }
+  .lang-tab { background: none; border: none; color: #888; cursor: pointer; font-size: 15px; padding: 8px 15px; border-radius: 4px; transition: 0.3s; font-weight: 600; }
+  .lang-tab.active { background: #fff; color: #000; }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
   /* Liste des produits */
   .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
   .product-list-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; margin-right: 15px; }
@@ -62,10 +70,66 @@
   <div class="admin-box">
     <h2>Ajouter un nouveau produit</h2>
     <form id="add-product-form">
-      <div class="form-group">
-        <label>Titre du produit</label>
-        <input type="text" id="p-title" required placeholder="Ex: Maison Mobile Premium 2024" />
+      
+      <!-- Sélecteur de langue pour le formulaire -->
+      <div class="lang-tabs">
+        <button type="button" class="lang-tab active" onclick="switchTab('de')">🇩🇪 Allemand (Principal)</button>
+        <button type="button" class="lang-tab" onclick="switchTab('fr')">🇫🇷 Français</button>
+        <button type="button" class="lang-tab" onclick="switchTab('it')">🇮🇹 Italien</button>
+        <button type="button" class="lang-tab" onclick="switchTab('en')">🇬🇧 Anglais</button>
       </div>
+
+      <!-- Contenu Allemand -->
+      <div id="tab-de" class="lang-content active">
+        <div class="form-group">
+          <label>Titre du produit (DE)</label>
+          <input type="text" id="p-title-de" required placeholder="Ex: Luxus Mobilheim 2024" />
+        </div>
+        <div class="form-group">
+          <label>Description (DE)</label>
+          <textarea id="p-desc-de" rows="3" placeholder="Beschreibung..."></textarea>
+        </div>
+      </div>
+
+      <!-- Contenu Français -->
+      <div id="tab-fr" class="lang-content">
+        <div class="form-group">
+          <label>Titre du produit (FR)</label>
+          <input type="text" id="p-title-fr" placeholder="Ex: Maison Mobile de Luxe 2024" />
+        </div>
+        <div class="form-group">
+          <label>Description (FR)</label>
+          <textarea id="p-desc-fr" rows="3" placeholder="Description..."></textarea>
+        </div>
+      </div>
+
+      <!-- Contenu Italien -->
+      <div id="tab-it" class="lang-content">
+        <div class="form-group">
+          <label>Titre du produit (IT)</label>
+          <input type="text" id="p-title-it" placeholder="Ex: Casa Mobile di Lusso 2024" />
+        </div>
+        <div class="form-group">
+          <label>Description (IT)</label>
+          <textarea id="p-desc-it" rows="3" placeholder="Descrizione..."></textarea>
+        </div>
+      </div>
+
+      <!-- Contenu Anglais -->
+      <div id="tab-en" class="lang-content">
+        <div class="form-group">
+          <label>Titre du produit (EN)</label>
+          <input type="text" id="p-title-en" placeholder="Ex: Luxury Mobile Home 2024" />
+        </div>
+        <div class="form-group">
+          <label>Description (EN)</label>
+          <textarea id="p-desc-en" rows="3" placeholder="Description..."></textarea>
+        </div>
+      </div>
+
+      <!-- Informations communes -->
+      <hr style="border-color: #333; margin: 30px 0;">
+      
       <div class="form-group">
         <label>Catégorie</label>
         <select id="p-category" required>
@@ -103,14 +167,12 @@
           <input type="text" id="p-width" placeholder="3m" />
         </div>
       </div>
-      <div class="form-group">
-        <label>Description (Optionnel)</label>
-        <textarea id="p-description" rows="3" placeholder="Description détaillée..."></textarea>
-      </div>
-      <div class="form-group">
+      
+      <div class="form-group" style="margin-top: 20px;">
         <label>Photos du produit (Sélectionnez plusieurs photos)</label>
         <input type="file" id="p-images" accept="image/*" multiple required />
       </div>
+
       <button type="submit" class="btn-submit">Ajouter le produit</button>
       <p id="status-msg" style="text-align: center; margin-top: 15px; font-size: 14px;"></p>
     </form>
