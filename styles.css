@@ -147,8 +147,22 @@ a { color: inherit; text-decoration: none; }
 .product-item img { width: 100%; height: 250px; object-fit: cover; }
 .product-info { padding: 20px; }
 .product-info h4 { font-family: var(--font-display); font-size: 20px; margin-bottom: 10px; }
-.product-price { font-size: 22px; font-weight: 600; margin-bottom: 15px; }
-.product-specs { display: flex; flex-wrap: wrap; gap: 15px; font-size: 13px; color: var(--muted); }
+.product-price { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+
+/* Description du produit sur la carte */
+.product-description {
+  font-size: 13.5px;
+  color: #aaa;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  /* Limite le texte à 3 lignes avec des points de suspension */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-specs { display: flex; flex-wrap: wrap; gap: 15px; font-size: 13px; color: var(--muted); margin-top: 15px; padding-top: 15px; border-top: 1px solid #222; }
 .product-specs span { display: flex; align-items: center; gap: 5px; }
 
 /* Bouton "Voir tout" */
