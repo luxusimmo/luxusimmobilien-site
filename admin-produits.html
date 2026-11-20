@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
 <style>
-  /* Styles spécifiques à l'admin */
   body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; padding-top: 100px; }
   .admin-container { max-width: 900px; margin: 0 auto; padding: 20px; }
   .admin-box { background: #111; border: 1px solid #222; border-radius: 8px; padding: 30px; margin-bottom: 30px; }
@@ -33,13 +32,18 @@
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   /* Liste des produits */
-  .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
+  .product-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; flex-wrap: wrap; gap: 10px; }
   .product-list-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; margin-right: 15px; }
-  .product-info { flex: 1; }
+  .product-info { flex: 1; min-width: 200px; }
   .product-info h4 { margin: 0 0 5px 0; font-size: 16px; }
   .product-info p { margin: 0; font-size: 13px; color: #888; }
+  .product-actions { display: flex; gap: 10px; }
+  
+  .btn-edit { background: none; border: 1px solid #fff; color: #fff; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+  .btn-edit:hover { background: #fff; color: #000; }
   .btn-delete { background: none; border: 1px solid #ff4444; color: #ff4444; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
   .btn-delete:hover { background: #ff4444; color: #fff; }
+  .btn-cancel { background: #333; color: #fff; border: none; padding: 15px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; display: none; font-weight: 600; }
   
   .login-view { max-width: 400px; margin: 15vh auto; background: #111; padding: 40px; border-radius: 8px; border: 1px solid #222; }
   .login-view h2 { text-align: center; margin-bottom: 20px; font-family: 'Space Grotesk'; }
@@ -66,12 +70,11 @@
     <button class="btn-delete" onclick="logout()">Déconnexion</button>
   </div>
 
-  <!-- Formulaire d'ajout -->
+  <!-- Formulaire d'ajout / modification -->
   <div class="admin-box">
-    <h2>Ajouter un nouveau produit</h2>
+    <h2 id="form-title">Ajouter un nouveau produit</h2>
     <form id="add-product-form">
       
-      <!-- Sélecteur de langue pour le formulaire -->
       <div class="lang-tabs">
         <button type="button" class="lang-tab active" onclick="switchTab('de')">🇩🇪 Allemand (Principal)</button>
         <button type="button" class="lang-tab" onclick="switchTab('fr')">🇫🇷 Français</button>
@@ -79,7 +82,6 @@
         <button type="button" class="lang-tab" onclick="switchTab('en')">🇬🇧 Anglais</button>
       </div>
 
-      <!-- Contenu Allemand -->
       <div id="tab-de" class="lang-content active">
         <div class="form-group">
           <label>Titre du produit (DE)</label>
@@ -91,7 +93,6 @@
         </div>
       </div>
 
-      <!-- Contenu Français -->
       <div id="tab-fr" class="lang-content">
         <div class="form-group">
           <label>Titre du produit (FR)</label>
@@ -103,7 +104,6 @@
         </div>
       </div>
 
-      <!-- Contenu Italien -->
       <div id="tab-it" class="lang-content">
         <div class="form-group">
           <label>Titre du produit (IT)</label>
@@ -115,7 +115,6 @@
         </div>
       </div>
 
-      <!-- Contenu Anglais -->
       <div id="tab-en" class="lang-content">
         <div class="form-group">
           <label>Titre du produit (EN)</label>
@@ -127,7 +126,6 @@
         </div>
       </div>
 
-      <!-- Informations communes -->
       <hr style="border-color: #333; margin: 30px 0;">
       
       <div class="form-group">
@@ -169,21 +167,20 @@
       </div>
       
       <div class="form-group" style="margin-top: 20px;">
-        <label>Photos du produit (Sélectionnez plusieurs photos)</label>
-        <input type="file" id="p-images" accept="image/*" multiple required />
+        <label>Photos du produit (Laissez vide pour garder les anciennes lors d'une modification)</label>
+        <input type="file" id="p-images" accept="image/*" multiple />
       </div>
 
-      <button type="submit" class="btn-submit">Ajouter le produit</button>
+      <button type="submit" id="btn-submit-form" class="btn-submit">Ajouter le produit</button>
+      <button type="button" id="btn-cancel-edit" class="btn-cancel" onclick="resetForm()">Annuler la modification</button>
+      
       <p id="status-msg" style="text-align: center; margin-top: 15px; font-size: 14px;"></p>
     </form>
   </div>
 
-  <!-- Liste des produits existants -->
   <div class="admin-box">
     <h2>Vos produits en ligne</h2>
-    <div id="products-list">
-      Chargement...
-    </div>
+    <div id="products-list">Chargement...</div>
   </div>
 </div>
 
