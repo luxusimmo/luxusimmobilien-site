@@ -7,9 +7,9 @@ const dynamicTitle = document.getElementById('dynamic-title');
 const btnShowAll = document.getElementById('btn-show-all');
 
 let allProducts = [];
-window.productGalleries = {}; // Stocke les galeries pour la modale
+window.productGalleries = {}; 
 
-// 1. Récupérer les produits depuis Supabase
+// Récupérer les produits
 async function fetchProducts() {
   const { data, error } = await supabase
     .from('products')
@@ -18,7 +18,7 @@ async function fetchProducts() {
 
   if (error) {
     console.error("Erreur chargement produits:", error);
-    productGrid.innerHTML = '<p style="color: #ff5c5c; text-align: center; width: 100%;">Erreur de chargement des produits.</p>';
+    productGrid.innerHTML = '<p style="color: #ff5c5c; text-align: center; width: 100%;">Erreur de chargement.</p>';
     return;
   }
 
@@ -26,7 +26,7 @@ async function fetchProducts() {
   renderProducts('all');
 }
 
-// 2. Afficher les produits (avec filtre)
+// Afficher les produits
 function renderProducts(category) {
   let filtered = allProducts;
   
@@ -50,18 +50,21 @@ function renderProducts(category) {
   }
 
   productGrid.innerHTML = filtered.map(p => {
-    // Gestion de la galerie (fallback si une seule image)
     const gallery = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls : [p.image_url];
     window.productGalleries[p.id] = gallery;
+
+    // Sélection de la bonne langue (avec fallback sur l'allemand ou l'ancien titre)
+    const displayTitle = p[`title_${lang}`] || p.title_de || p.title || 'Sans titre';
+    const displayDesc = p[`description_${lang}`] || p.description_de || p.description || '';
 
     return `
     <div class="product-item">
       <div class="product-image-wrapper" onclick="openGallery('${p.id}')">
-        <img src="${p.image_url}" alt="${p.title}">
+        <img src="${p.image_url}" alt="${displayTitle}">
         ${gallery.length > 1 ? `<div class="gallery-badge">📷 ${gallery.length} photos</div>` : ''}
       </div>
       <div class="product-info">
-        <h4>${p.title}</h4>
+        <h4>${displayTitle}</h4>
         <div class="product-price">${p.price ? p.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }) : 'Preis auf Anfrage'}</div>
         <div class="product-specs">
           <span><strong>Fläche:</strong> ${p.surface || '-'}</span>
@@ -75,7 +78,7 @@ function renderProducts(category) {
   `}).join('');
 }
 
-// 3. Fonction globale pour le filtre des catégories
+// Filtres
 window.filterCategory = function(category) {
   renderProducts(category);
   const showcaseSection = document.getElementById('showcase');
@@ -84,7 +87,7 @@ window.filterCategory = function(category) {
   if (mobileNav) mobileNav.hidden = true;
 }
 
-// 4. Fonction pour ouvrir la galerie photo
+// Galerie
 window.openGallery = function(productId) {
   const images = window.productGalleries[productId];
   if (!images || images.length === 0) return;
@@ -105,5 +108,4 @@ window.openGallery = function(productId) {
   document.body.appendChild(modal);
 }
 
-// Lancement
 fetchProducts();
