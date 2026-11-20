@@ -9,7 +9,14 @@ const btnShowAll = document.getElementById('btn-show-all');
 let allProducts = [];
 window.productGalleries = {}; 
 
-// Récupérer les produits
+// Dictionnaire pour traduire les étiquettes des caractéristiques
+const specsLabels = {
+  de: { surface: 'Fläche', condition: 'Zustand', year: 'Baujahr', length: 'L', width: 'B' },
+  it: { surface: 'Superficie', condition: 'Stato', year: 'Anno', length: 'Lun', width: 'Lar' },
+  fr: { surface: 'Surface', condition: 'État', year: 'Année', length: 'L', width: 'l' },
+  en: { surface: 'Surface', condition: 'Condition', year: 'Year', length: 'L', width: 'W' }
+};
+
 async function fetchProducts() {
   const { data, error } = await supabase
     .from('products')
@@ -26,7 +33,6 @@ async function fetchProducts() {
   renderProducts('all');
 }
 
-// Afficher les produits
 function renderProducts(category) {
   let filtered = allProducts;
   
@@ -44,6 +50,9 @@ function renderProducts(category) {
   const lang = localStorage.getItem('luxus_site_lang') || 'de';
   if (window.applyLanguage) window.applyLanguage(lang);
 
+  // Récupération des étiquettes traduites
+  const labels = specsLabels[lang] || specsLabels.de;
+
   if (filtered.length === 0) {
     productGrid.innerHTML = '<p style="color: #888; text-align: center; width: 100%;">Aucun produit disponible dans cette catégorie.</p>';
     return;
@@ -53,7 +62,7 @@ function renderProducts(category) {
     const gallery = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls : [p.image_url];
     window.productGalleries[p.id] = gallery;
 
-    // Sélection de la bonne langue (avec fallback sur l'allemand ou l'ancien titre)
+    // Sélection de la bonne langue
     const displayTitle = p[`title_${lang}`] || p.title_de || p.title || 'Sans titre';
     const displayDesc = p[`description_${lang}`] || p.description_de || p.description || '';
 
@@ -65,20 +74,23 @@ function renderProducts(category) {
       </div>
       <div class="product-info">
         <h4>${displayTitle}</h4>
-        <div class="product-price">${p.price ? p.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }) : 'Preis auf Anfrage'}</div>
+        <div class="product-price">${p.price ? p.price.toLocaleString(lang, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }) : 'Preis auf Anfrage'}</div>
+        
+        <!-- Affichage de la description ici -->
+        <div class="product-description">${displayDesc}</div>
+        
         <div class="product-specs">
-          <span><strong>Fläche:</strong> ${p.surface || '-'}</span>
-          <span><strong>Zustand:</strong> ${p.condition || '-'}</span>
-          <span><strong>Baujahr:</strong> ${p.year || '-'}</span>
-          ${p.length ? `<span><strong>L:</strong> ${p.length}</span>` : ''}
-          ${p.width ? `<span><strong>B:</strong> ${p.width}</span>` : ''}
+          <span><strong>${labels.surface}:</strong> ${p.surface || '-'}</span>
+          <span><strong>${labels.condition}:</strong> ${p.condition || '-'}</span>
+          <span><strong>${labels.year}:</strong> ${p.year || '-'}</span>
+          ${p.length ? `<span><strong>${labels.length}:</strong> ${p.length}</span>` : ''}
+          ${p.width ? `<span><strong>${labels.width}:</strong> ${p.width}</span>` : ''}
         </div>
       </div>
     </div>
   `}).join('');
 }
 
-// Filtres
 window.filterCategory = function(category) {
   renderProducts(category);
   const showcaseSection = document.getElementById('showcase');
@@ -87,7 +99,6 @@ window.filterCategory = function(category) {
   if (mobileNav) mobileNav.hidden = true;
 }
 
-// Galerie
 window.openGallery = function(productId) {
   const images = window.productGalleries[productId];
   if (!images || images.length === 0) return;
