@@ -1,20 +1,30 @@
-const DEFAULT_LANG = 'de'; // Allemand par défaut
+const DEFAULT_LANG = 'de';
 let translations = {};
 
 async function loadTranslations() {
-  const res = await fetch('./translations.json');
-  return res.json();
+  try {
+    const res = await fetch('./translations.json');
+    if (!res.ok) throw new Error("Fichier translations.json introuvable");
+    return await res.json();
+  } catch (error) {
+    console.error("Erreur de chargement JSON:", error);
+    return null;
+  }
 }
 
 function applyLanguage(lang) {
+  if (!translations) return;
+  
   const dict = translations[lang] || translations[DEFAULT_LANG];
   if (!dict) return;
 
+  // Traduction des textes simples
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (dict[key] !== undefined) el.textContent = dict[key];
   });
 
+  // Traduction des textes avec du HTML (ex: <br>)
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const key = el.dataset.i18nHtml;
     if (dict[key] !== undefined) el.innerHTML = dict[key];
@@ -26,34 +36,34 @@ function applyLanguage(lang) {
 
   localStorage.setItem('luxus_site_lang', lang);
   document.documentElement.lang = lang;
+
+  // ⚠️ LIGNE MAGIQUE : On recharge les témoignages pour traduire "Client Vérifié"
+  if (typeof fetchTestimonials === 'function') {
+    fetchTestimonials();
+  }
 }
 
-// --- INITIALISATION ---
 document.addEventListener('DOMContentLoaded', async () => {
   
-  // 1. CHARGEMENT DES LANGUES
-  try {
-    translations = await loadTranslations();
+  translations = await loadTranslations();
+  
+  if (translations) {
     const saved = localStorage.getItem('luxus_site_lang');
     const browserLang = (navigator.language || 'de').slice(0, 2);
     const initial = saved || (['de', 'it', 'fr', 'en'].includes(browserLang) ? browserLang : DEFAULT_LANG);
-    
-    if (translations) applyLanguage(initial);
-  } catch (err) {
-    console.error('Erreur traductions:', err);
+    applyLanguage(initial);
   }
 
-  // 2. GESTION DU MENU DES LANGUES
+  // Gestion du menu des langues
   const langBtn = document.getElementById('lang-btn');
   const langMenu = document.getElementById('lang-menu');
   
   if (langBtn && langMenu) {
     langBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+      e.preventDefault(); e.stopPropagation();
       langMenu.hidden = !langMenu.hidden;
     });
 
-    // Sélection de la langue
     document.querySelectorAll('.lang-opt').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -62,7 +72,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Fermer le menu si on clique ailleurs
     document.addEventListener('click', (e) => {
       if (!langMenu.hidden && !langMenu.contains(e.target) && e.target !== langBtn) {
         langMenu.hidden = true;
@@ -70,25 +79,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // 3. GESTION DU MENU HAMBURGER
+  // Gestion du menu Hamburger
   const menuBtn = document.getElementById('menu-btn');
   const mobileNav = document.getElementById('mobile-nav');
 
   if (menuBtn && mobileNav) {
     menuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+      e.preventDefault(); e.stopPropagation();
       mobileNav.hidden = !mobileNav.hidden;
     });
 
-    // Fermer au clic sur un lien
     document.querySelectorAll('.mobile-nav a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileNav.hidden = true;
-      });
+      link.addEventListener('click', () => { mobileNav.hidden = true; });
     });
   }
 
-  // 4. DIAPORAMA (SLIDER) DE L'EN-TÊTE
+  // Diaporama (Slider)
   const slides = document.querySelectorAll('.hero-slider .slide');
   if (slides.length > 1) {
     let currentSlide = 0;
@@ -96,7 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       slides[currentSlide].classList.remove('active');
       currentSlide = (currentSlide + 1) % slides.length;
       slides[currentSlide].classList.add('active');
-    }, 4000); // Change d'image toutes les 4 secondes
+    }, 4000);
   }
-
 });
