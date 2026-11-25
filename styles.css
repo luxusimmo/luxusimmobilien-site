@@ -4,7 +4,6 @@
   --text: #ffffff;
   --muted: #888888;
   --border: #222222;
-  /* NOUVELLES POLICES */
   --font-display: 'Playfair Display', serif;
   --font-body: 'Montserrat', sans-serif;
 }
@@ -35,9 +34,11 @@ a { color: inherit; text-decoration: none; }
 }
 .brand {
   font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: 2px; cursor: pointer;
+  white-space: nowrap; /* Empêche le logo de revenir à la ligne */
 }
 .header-controls {
   display: flex; gap: 20px; align-items: center;
+  flex-shrink: 0; /* Empêche les boutons d'être écrasés */
 }
 .icon-btn {
   background: none; border: none; color: var(--text); cursor: pointer;
@@ -64,7 +65,7 @@ a { color: inherit; text-decoration: none; }
 
 /* Mobile Nav */
 .mobile-nav {
-  position: fixed; inset: 0; background: rgba(5,5,5,0.98); z-index: 999;
+  position: fixed; inset: 0; background: rgba(5,5,5,0.98); z-index: 9999;
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 30px;
 }
 .mobile-nav a {
@@ -107,7 +108,6 @@ a { color: inherit; text-decoration: none; }
   border: none; cursor: pointer; transition: 0.3s;
 }
 .btn-main:hover { background: #ddd; transform: translateY(-2px); }
-
 .btn-secondary {
   background: transparent; color: #fff; padding: 16px 40px; border-radius: 0;
   font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;
@@ -223,14 +223,14 @@ a { color: inherit; text-decoration: none; }
 
 /* ================= BOUTONS FLOTTANTS ================= */
 .floating-wa {
-  position: fixed; bottom: 30px; right: 30px; z-index: 999;
+  position: fixed; bottom: 30px; right: 30px; z-index: 9999;
   width: 55px; height: 55px; background: #25D366; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s; color: #fff;
 }
 .floating-wa:hover { transform: scale(1.1); }
 .floating-top {
-  position: fixed; bottom: 100px; right: 35px; z-index: 999;
+  position: fixed; bottom: 100px; right: 35px; z-index: 9999;
   width: 45px; height: 45px; background: #222; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s; border: 1px solid #444; cursor: pointer; color: #fff;
@@ -239,18 +239,17 @@ a { color: inherit; text-decoration: none; }
 
 /* ================= RESPONSIVE MOBILE ================= */
 @media (max-width: 900px) {
-  /* Correction de l'en-tête pour faire tenir le menu */
-  .site-header { padding: 15px 20px; }
-  .brand { font-size: 16px; letter-spacing: 1px; }
-  .header-controls { gap: 12px; }
+  /* Réduction du logo pour laisser la place au menu */
+  .site-header { padding: 15px 15px; }
+  .brand { font-size: 14px; letter-spacing: 0.5px; } 
+  .header-controls { gap: 10px; }
   
-  /* Le reste */
   .grid-3, .product-detail-layout, .footer-grid { grid-template-columns: 1fr; }
   .stats-container { grid-template-columns: 1fr; gap: 40px; }
   .collections { padding: 80px 20px; }
   .hero-title { font-size: 42px; }
-  
-  /* Correction : On remonte les boutons flottants pour ne pas qu'ils soient cachés par la barre du téléphone */
-  .floating-wa { bottom: 90px; right: 20px; width: 50px; height: 50px; }
-  .floating-top { bottom: 160px; right: 22px; width: 45px; height: 45px; }
+
+  /* Correction : Boutons flottants remontés pour être visibles sur mobile */
+  .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+  .floating-top { bottom: 85px; right: 22px; width: 45px; height: 45px; }
 }
