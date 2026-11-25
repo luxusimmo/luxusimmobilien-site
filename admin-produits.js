@@ -47,7 +47,7 @@ window.switchLangTab = function(lang) {
 }
 
 // ==========================================
-// GESTION DES PRODUITS (Code existant conservé)
+// GESTION DES PRODUITS
 // ==========================================
 let editingProductId = null;
 let productImages = [];
@@ -101,7 +101,7 @@ document.getElementById('add-product-form').addEventListener('submit', async (e)
       const fileName = `${Date.now()}_${i}.${fileExt}`;
       const { error: uploadError } = await supabase.storage.from('product-images').upload(`produits/${fileName}`, img.file);
       if (uploadError) throw uploadError;
-      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(`produits/${fileName}`);
+      const { data: urlData } = await supabase.storage.from('product-images').getPublicUrl(`produits/${fileName}`);
       finalUrls.push(urlData.publicUrl);
     }
 
@@ -110,6 +110,7 @@ document.getElementById('add-product-form').addEventListener('submit', async (e)
       price: document.getElementById('p-price').value ? parseFloat(document.getElementById('p-price').value) : null,
       surface: document.getElementById('p-surface').value,
       condition: document.getElementById('p-condition').value,
+      availability: document.getElementById('p-availability').value,
       year: document.getElementById('p-year').value ? parseInt(document.getElementById('p-year').value) : null,
       length: document.getElementById('p-length').value,
       width: document.getElementById('p-width').value,
@@ -154,7 +155,7 @@ async function loadProducts() {
       <img src="${p.image_url}" alt="photo">
       <div class="item-info">
         <h4>${p.title_de || p.title}</h4>
-        <p>${p.price ? p.price + ' €' : 'Prix non défini'} · ${p.category}</p>
+        <p>${p.price ? p.price + ' €' : 'Prix non défini'} · ${p.category} · ${p.availability || 'Disponible'}</p>
       </div>
       <div>
         <button class="btn-delete" style="border-color:#fff; color:#fff;" onclick="editProduct('${p.id}')">Modifier</button>
@@ -180,6 +181,7 @@ window.editProduct = async function(id) {
   document.getElementById('p-price').value = data.price || '';
   document.getElementById('p-surface').value = data.surface || '';
   document.getElementById('p-condition').value = data.condition || 'Neuf';
+  document.getElementById('p-availability').value = data.availability || 'Disponible';
   document.getElementById('p-year').value = data.year || '';
   document.getElementById('p-length').value = data.length || '';
   document.getElementById('p-width').value = data.width || '';
@@ -226,7 +228,6 @@ document.getElementById('add-testimonial-form').addEventListener('submit', async
     const file = document.getElementById('t-image').files[0];
     if (!file) throw new Error("Veuillez ajouter une photo.");
 
-    // 1. Upload de la photo dans le même bucket (product-images)
     const fileExt = file.name.split('.').pop();
     const fileName = `testi_${Date.now()}.${fileExt}`;
     const { error: uploadError } = await supabase.storage.from('product-images').upload(`temoignages/${fileName}`, file);
@@ -234,7 +235,6 @@ document.getElementById('add-testimonial-form').addEventListener('submit', async
     
     const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(`temoignages/${fileName}`);
 
-    // 2. Insertion dans la base
     const { error: dbError } = await supabase.from('testimonials').insert([{
       name: document.getElementById('t-name').value,
       quote: document.getElementById('t-quote').value,
