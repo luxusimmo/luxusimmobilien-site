@@ -7,10 +7,10 @@ let allProducts = [];
 let currentCategory = '';
 
 const translations = {
-  de: { surface: 'Fläche', condition: 'Zustand', year: 'Baujahr', length: 'Länge', width: 'Breite', priceOnReq: 'Preis auf Anfrage', whatsapp: 'Auf WhatsApp anfragen', backHome: 'Zurück zur Startseite', backList: 'Zurück zur Liste', desc: 'Beschreibung', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office' },
-  it: { surface: 'Superficie', condition: 'Stato', year: 'Anno', length: 'Lunghezza', width: 'Larghezza', priceOnReq: 'Prezzo su richiesta', whatsapp: 'Richiedi su WhatsApp', backHome: 'Torna alla home', backList: 'Torna alla lista', desc: 'Descrizione', cat_mobile_home: 'Case Mobili', cat_maritime: 'Marittimi', cat_office: 'Ufficio' },
-  fr: { surface: 'Surface', condition: 'État', year: 'Année', length: 'Longueur', width: 'Largeur', priceOnReq: 'Prix sur demande', whatsapp: 'Demander sur WhatsApp', backHome: "Retour à l'accueil", backList: 'Retour à la liste', desc: 'Description', cat_mobile_home: 'Maisons Mobiles', cat_maritime: 'Maritime', cat_office: 'Bureau' },
-  en: { surface: 'Surface', condition: 'Condition', year: 'Year', length: 'Length', width: 'Width', priceOnReq: 'Price on request', whatsapp: 'Inquire on WhatsApp', backHome: 'Back to home', backList: 'Back to list', desc: 'Description', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office' }
+  de: { surface: 'Fläche', condition: 'Zustand', year: 'Baujahr', length: 'Länge', width: 'Breite', priceOnReq: 'Preis auf Anfrage', whatsapp: 'Auf WhatsApp anfragen', backHome: 'Zurück zur Startseite', backList: 'Zurück zur Liste', desc: 'Beschreibung', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office', client_verified: 'Verifizierter Kunde' },
+  it: { surface: 'Superficie', condition: 'Stato', year: 'Anno', length: 'Lunghezza', width: 'Larghezza', priceOnReq: 'Prezzo su richiesta', whatsapp: 'Richiedi su WhatsApp', backHome: 'Torna alla home', backList: 'Torna alla lista', desc: 'Descrizione', cat_mobile_home: 'Case Mobili', cat_maritime: 'Marittimi', cat_office: 'Ufficio', client_verified: 'Cliente Verificato' },
+  fr: { surface: 'Surface', condition: 'État', year: 'Année', length: 'Longueur', width: 'Largeur', priceOnReq: 'Prix sur demande', whatsapp: 'Demander sur WhatsApp', backHome: "Retour à l'accueil", backList: 'Retour à la liste', desc: 'Description', cat_mobile_home: 'Maisons Mobiles', cat_maritime: 'Maritime', cat_office: 'Bureau', client_verified: 'Client Vérifié' },
+  en: { surface: 'Surface', condition: 'Condition', year: 'Year', length: 'Length', width: 'Width', priceOnReq: 'Price on request', whatsapp: 'Inquire on WhatsApp', backHome: 'Back to home', backList: 'Back to list', desc: 'Description', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office', client_verified: 'Verified Client' }
 };
 
 function getLang() { return localStorage.getItem('luxus_site_lang') || 'de'; }
@@ -111,7 +111,8 @@ async function fetchTestimonials() {
   }
 
   const lang = getLang();
-  const translatedVerified = translations[lang].client_verified || "Client Vérifié";
+  // On récupère la traduction de "Client Vérifié"
+  const translatedVerified = translations[lang].client_verified;
 
   grid.innerHTML = data.map(t => `
     <div class="testimonial-card">
@@ -128,5 +129,11 @@ async function fetchTestimonials() {
   `).join('');
 }
 
+// Initialisation
 fetchProducts();
 fetchTestimonials();
+
+// ⚠️ LA CORRECTION EST ICI : On écoute si la langue a changé pour actualiser les témoignages
+window.addEventListener('langChanged', () => {
+  fetchTestimonials();
+});
