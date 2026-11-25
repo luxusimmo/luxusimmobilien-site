@@ -22,6 +22,9 @@ window.showView = function(viewName) {
   document.getElementById('view-product').hidden = true;
   document.getElementById(`view-${viewName}`).hidden = false;
   window.scrollTo(0, 0);
+  
+  // Relancer les animations au changement de vue
+  setTimeout(initRevealAnimations, 100);
 }
 
 window.showCategory = function(category) {
@@ -43,7 +46,7 @@ window.showCategory = function(category) {
       const img = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls[0] : p.image_url;
       
       return `
-        <div class="product-card" onclick="showProductDetail('${p.id}')">
+        <div class="product-card reveal" onclick="showProductDetail('${p.id}')">
           <div class="card-image"><img src="${img}" alt="${title}"></div>
           <div class="card-info">
             <h3>${title}</h3>
@@ -111,11 +114,10 @@ async function fetchTestimonials() {
   }
 
   const lang = getLang();
-  // On récupère la traduction de "Client Vérifié"
   const translatedVerified = translations[lang].client_verified;
 
   grid.innerHTML = data.map(t => `
-    <div class="testimonial-card">
+    <div class="testimonial-card reveal">
       <div class="testimonial-quote">"</div>
       <p class="testimonial-text">${t.quote}</p>
       <div class="testimonial-author">
@@ -129,11 +131,33 @@ async function fetchTestimonials() {
   `).join('');
 }
 
-// Initialisation
-fetchProducts();
-fetchTestimonials();
+// --- OBSERVATEUR D'ANIMATIONS ---
+function initRevealAnimations() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-// ⚠️ LA CORRECTION EST ICI : On écoute si la langue a changé pour actualiser les témoignages
+  reveals.forEach(reveal => observer.observe(reveal));
+}
+
+// Initialisation
+fetchProducts().then(() => {
+  // On initialise les animations après le chargement des produits
+  setTimeout(initRevealAnimations, 300);
+});
+fetchTestimonials().then(() => {
+  setTimeout(initRevealAnimations, 300);
+});
+
+// Écouter le changement de langue
 window.addEventListener('langChanged', () => {
-  fetchTestimonials();
+  fetchTestimonials().then(() => {
+    setTimeout(initRevealAnimations, 300);
+  });
 });
