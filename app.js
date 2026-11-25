@@ -3,6 +3,30 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-config.js';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ==========================================
+// 1. GESTION DE LA BANNIÈRE DE COOKIES
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const cookieBanner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('accept-cookies');
+
+  if (cookieBanner && acceptBtn) {
+    // Si l'utilisateur n'a pas encore accepté
+    if (!localStorage.getItem('cookiesAccepted')) {
+      // On affiche la bannière après 1.5 seconde
+      setTimeout(() => { cookieBanner.hidden = false; }, 1500); 
+    }
+    
+    acceptBtn.addEventListener('click', () => {
+      localStorage.setItem('cookiesAccepted', 'true');
+      cookieBanner.hidden = true;
+    });
+  }
+});
+
+// ==========================================
+// 2. TRADUCTIONS POUR LES FICHES PRODUITS
+// ==========================================
 let allProducts = [];
 let currentCategory = '';
 
@@ -15,12 +39,23 @@ const translations = {
 
 function getLang() { return localStorage.getItem('luxus_site_lang') || 'de'; }
 
-// --- NAVIGATION ---
+// ==========================================
+// 3. NAVIGATION ENTRE LES VUES
+// ==========================================
 window.showView = function(viewName) {
+  // On cache toutes les vues
   document.getElementById('view-home').hidden = true;
   document.getElementById('view-category').hidden = true;
   document.getElementById('view-product').hidden = true;
-  document.getElementById(`view-${viewName}`).hidden = false;
+  document.getElementById('view-impressum').hidden = true;
+  document.getElementById('view-privacy').hidden = true;
+  
+  // On affiche la vue demandée
+  const targetView = document.getElementById(`view-${viewName}`);
+  if (targetView) {
+    targetView.hidden = false;
+  }
+  
   window.scrollTo(0, 0);
   
   // Relancer les animations au changement de vue
@@ -95,13 +130,14 @@ window.showProductDetail = function(id) {
   showView('product');
 }
 
-// --- CHARGEMENT DES PRODUITS ---
+// ==========================================
+// 4. CHARGEMENT DES DONNÉES (SUPABASE)
+// ==========================================
 async function fetchProducts() {
   const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
   if (!error) allProducts = data || [];
 }
 
-// --- CHARGEMENT DES TÉMOIGNAGES ---
 async function fetchTestimonials() {
   const grid = document.getElementById('testimonials-grid');
   if (!grid) return;
@@ -131,7 +167,9 @@ async function fetchTestimonials() {
   `).join('');
 }
 
-// --- OBSERVATEUR D'ANIMATIONS ---
+// ==========================================
+// 5. ANIMATIONS ET INITIALISATION
+// ==========================================
 function initRevealAnimations() {
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
@@ -146,9 +184,8 @@ function initRevealAnimations() {
   reveals.forEach(reveal => observer.observe(reveal));
 }
 
-// Initialisation
+// Initialisation au chargement de la page
 fetchProducts().then(() => {
-  // On initialise les animations après le chargement des produits
   setTimeout(initRevealAnimations, 300);
 });
 fetchTestimonials().then(() => {
