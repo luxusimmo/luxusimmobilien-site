@@ -4,23 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- SEO & Google -->
 <title>LUXUSIMMOBILIEN — Premium Mobilheime & Container in Berlin</title>
 <meta name="description" content="Entdecken Sie exklusive Mobilheime, Seecontainer und Bürocontainer bei LUXUSIMMOBILIEN in Berlin. Höchste Qualität, modernes Design und flexible Lösungen." />
 <meta name="keywords" content="Mobilheime, Container, Seecontainer, Bürocontainer, Berlin, Luxusimmobilien, Tiny House, mobiles Wohnen" />
 <meta name="author" content="LUXUSIMMOBILIEN GmbH" />
 
-<!-- Open Graph (Pour WhatsApp et Facebook) -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://luxusimmo.github.io/luxusimmobilien-site/" />
 <meta property="og:title" content="LUXUSIMMOBILIEN — Premium Mobilheime & Container" />
 <meta property="og:description" content="Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container in Berlin." />
 <meta property="og:image" content="https://luxusimmo.github.io/luxusimmobilien-site/hero-1.jpeg" />
 
-<!-- Favicon (L'icône de l'onglet avec le nouveau nom) -->
 <link rel="icon" type="image/png" href="luxus-logo.png" />
 
-<!-- Polices -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -29,7 +25,6 @@
 <body>
 
 <header class="site-header">
-  <!-- Intégration du logo image avec le nouveau nom -->
   <a href="#" class="brand" onclick="showView('home')">
     <img src="luxus-logo.png" alt="LUXUSIMMOBILIEN" class="brand-logo">
   </a>
@@ -151,9 +146,7 @@
         <h2 class="section-title center reveal" data-i18n="testimonials_title">Ce que disent nos clients</h2>
         <p class="section-subtitle center reveal" data-i18n="testimonials_subtitle">Ils nous ont fait confiance.</p>
         
-        <div id="testimonials-grid" class="testimonials-grid">
-          <!-- Les témoignages s'afficheront ici via JS -->
-        </div>
+        <div id="testimonials-grid" class="testimonials-grid"></div>
       </div>
     </section>
   </div>
@@ -199,17 +192,63 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= VUE 4 : IMPRESSUM ================= -->
+  <div id="view-impressum" class="page-view" hidden>
+    <div class="container" style="max-width: 800px;">
+      <button class="btn-back" onclick="showView('home')">← <span data-i18n="back_home">Zurück zur Startseite</span></button>
+      <h1 class="page-title">Impressum</h1>
+      <div class="legal-text">
+        <h3>Angaben gemäß § 5 TMG</h3>
+        <p>LUXUSIMMOBILIEN GmbH<br>Max Mustermann Hauptstraße 42<br>10117 Berlin, DEUTSCHLAND</p>
+        
+        <h3>Vertreten durch</h3>
+        <p>FRANZ JOSEF EMBERGER</p>
+        
+        <h3>Kontakt</h3>
+        <p>Telefon: (+49) 178 406 5141<br>E-Mail: <a href="mailto:luxusimmobilien@inbox.eu" class="email-link">luxusimmobilien@inbox.eu</a></p>
+        
+        <h3>Registereintrag</h3>
+        <p>Amtsgericht Charlottenburg<br>HRB 972025 B</p>
+        
+        <h3>Umsatzsteuer-ID</h3>
+        <p>Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:<br>DE305687569</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VUE 5 : DATENSCHUTZ ================= -->
+  <div id="view-privacy" class="page-view" hidden>
+    <div class="container" style="max-width: 800px;">
+      <button class="btn-back" onclick="showView('home')">← <span data-i18n="back_home">Zurück zur Startseite</span></button>
+      <h1 class="page-title">Datenschutzerklärung</h1>
+      <div class="legal-text">
+        <h3>1. Datenschutz auf einen Blick</h3>
+        <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.</p>
+        
+        <h3>2. Verantwortliche Stelle</h3>
+        <p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br><br>
+        LUXUSIMMOBILIEN GmbH<br>Max Mustermann Hauptstraße 42<br>10117 Berlin<br>E-Mail: <a href="mailto:luxusimmobilien@inbox.eu" class="email-link">luxusimmobilien@inbox.eu</a></p>
+        
+        <h3>3. Datenerfassung auf dieser Website</h3>
+        <p>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen (z.B. über WhatsApp oder E-Mail). Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst (z.B. Browser, Betriebssystem).</p>
+        
+        <h3>4. Cookies</h3>
+        <p>Unsere Internetseiten verwenden teilweise so genannte Cookies. Cookies richten auf Ihrem Rechner keinen Schaden an und enthalten keine Viren. Sie dienen dazu, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen.</p>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer id="impressum" class="site-footer">
   <div class="footer-top">
-    <!-- Logo dans le footer avec le nouveau nom -->
     <img src="luxus-logo.png" alt="LUXUSIMMOBILIEN" class="footer-logo-img" onclick="showView('home')">
   </div>
   <div class="footer-grid reveal">
     <div>
-      <h4 data-i18n="footer_legal">Impressum</h4>
-      <p>LUXUSIMMOBILIEN GmbH<br>Max Mustermann Hauptstraße 42<br>10117 Berlin, DEUTSCHLAND<br>Vertreten durch: FRANZ JOSEF EMBERGER</p>
+      <h4>Rechtliches</h4>
+      <p style="cursor:pointer;" onclick="showView('impressum')">Impressum</p>
+      <p style="cursor:pointer;" onclick="showView('privacy')">Datenschutzerklärung</p>
     </div>
     <div>
       <h4 data-i18n="footer_registry">Registereintrag</h4>
@@ -217,13 +256,24 @@
     </div>
     <div>
       <h4 data-i18n="footer_contact">Kontakt</h4>
-      <p>E-Mail: luxusimmobilien@inbox.eu<br>Tel / WhatsApp: (+49) 178 406 5141</p>
+      <p>
+        E-Mail: <a href="mailto:luxusimmobilien@inbox.eu" class="email-link">luxusimmobilien@inbox.eu</a><br>
+        WhatsApp: <a href="https://wa.me/491784065141" target="_blank" class="email-link">(+49) 178 406 5141</a>
+      </p>
     </div>
   </div>
   <div class="footer-bottom">
     <p>&copy; <span id="year"></span> LUXUSIMMOBILIEN GmbH. <span data-i18n="footer_rights">Alle Rechte vorbehalten.</span></p>
   </div>
 </footer>
+
+<!-- BANNIÈRE COOKIES -->
+<div id="cookie-banner" class="cookie-banner" hidden>
+  <div class="cookie-content">
+    <p>Diese Website verwendet Cookies, um Ihnen das bestmögliche Erlebnis zu bieten. <a href="#" onclick="showView('privacy')">Mehr erfahren</a>.</p>
+    <button id="accept-cookies" class="btn-cookie">Akzeptieren</button>
+  </div>
+</div>
 
 <!-- Boutons flottants -->
 <a href="https://wa.me/491784065141" class="floating-wa" target="_blank" aria-label="WhatsApp">
