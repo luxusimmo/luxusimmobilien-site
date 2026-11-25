@@ -5,24 +5,6 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const loginView = document.getElementById('login-view');
 const adminView = document.getElementById('admin-view');
-const productsList = document.getElementById('products-list');
-const form = document.getElementById('add-product-form');
-const statusMsg = document.getElementById('status-msg');
-const formTitle = document.getElementById('form-title');
-const btnSubmitForm = document.getElementById('btn-submit-form');
-const btnCancelEdit = document.getElementById('btn-cancel-edit');
-const previewContainer = document.getElementById('image-preview-container');
-
-let editingProductId = null;
-let productImages = []; // Tableau qui stocke { file: File|null, url: string }
-
-// --- GESTION DES ONGLETS ---
-window.switchTab = function(lang) {
-  document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.lang-content').forEach(c => c.classList.remove('active'));
-  document.querySelector(`.lang-tab[onclick="switchTab('${lang}')"]`).classList.add('active');
-  document.getElementById(`tab-${lang}`).classList.add('active');
-}
 
 // --- AUTHENTIFICATION ---
 window.login = async function() {
@@ -40,6 +22,7 @@ async function checkSession() {
     loginView.style.display = 'none';
     adminView.style.display = 'block';
     loadProducts();
+    loadTestimonials();
   } else {
     loginView.style.display = 'block';
     adminView.style.display = 'none';
@@ -47,22 +30,38 @@ async function checkSession() {
 }
 checkSession();
 
-// --- GESTION DES IMAGES ET DE L'ORDRE ---
+// --- GESTION DES ONGLETS ---
+window.switchAdminTab = function(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#admin-view > div[id^="tab-"]').forEach(c => c.style.display = 'none');
+  
+  event.target.classList.add('active');
+  document.getElementById(`tab-${tab}`).style.display = 'block';
+}
+
+window.switchLangTab = function(lang) {
+  document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.lang-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`lang-${lang}`).classList.add('active');
+}
+
+// ==========================================
+// GESTION DES PRODUITS (Code existant conservé)
+// ==========================================
+let editingProductId = null;
+let productImages = [];
+const previewContainer = document.getElementById('image-preview-container');
+
 document.getElementById('p-images').addEventListener('change', (e) => {
   const files = Array.from(e.target.files);
-  files.forEach(file => {
-    productImages.push({ file: file, url: URL.createObjectURL(file) });
-  });
+  files.forEach(file => productImages.push({ file: file, url: URL.createObjectURL(file) }));
   renderImagePreviews();
-  e.target.value = ''; // Reset input
+  e.target.value = '';
 });
 
 function renderImagePreviews() {
-  if (productImages.length === 0) {
-    previewContainer.innerHTML = '';
-    return;
-  }
-
+  if (productImages.length === 0) { previewContainer.innerHTML = ''; return; }
   previewContainer.innerHTML = productImages.map((img, index) => `
     <div class="preview-item">
       ${index === 0 ? '<span class="cover-badge">Couverture</span>' : ''}
@@ -77,65 +76,41 @@ function renderImagePreviews() {
 }
 
 window.moveImage = function(index, direction) {
-  if (direction === -1 && index > 0) {
-    [productImages[index - 1], productImages[index]] = [productImages[index], productImages[index - 1]];
-  } else if (direction === 1 && index < productImages.length - 1) {
-    [productImages[index + 1], productImages[index]] = [productImages[index], productImages[index + 1]];
-  }
+  if (direction === -1 && index > 0) [productImages[index - 1], productImages[index]] = [productImages[index], productImages[index - 1]];
+  else if (direction === 1 && index < productImages.length - 1) [productImages[index + 1], productImages[index]] = [productImages[index], productImages[index + 1]];
   renderImagePreviews();
 }
+window.removeImage = function(index) { productImages.splice(index, 1); renderImagePreviews(); }
 
-window.removeImage = function(index) {
-  productImages.splice(index, 1);
-  renderImagePreviews();
-}
-
-// --- AJOUTER / MODIFIER ---
-form.addEventListener('submit', async (e) => {
+document.getElementById('add-product-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const btn = btnSubmitForm;
+  const btn = document.getElementById('btn-submit-product');
+  const status = document.getElementById('status-product');
   btn.disabled = true;
-  statusMsg.textContent = "Traitement en cours...";
-  statusMsg.style.color = "#aaa";
+  status.textContent = "Traitement en cours...";
+  status.style.color = "#aaa";
 
   try {
-    if (productImages.length === 0) {
-      throw new Error("Veuillez ajouter au moins une photo.");
-    }
-
+    if (productImages.length === 0) throw new Error("Veuillez ajouter au moins une photo.");
     const finalUrls = [];
 
-    // Upload séquentiel dans l'ordre défini
     for (let i = 0; i < productImages.length; i++) {
       const img = productImages[i];
-      
-      // Si l'image a déjà été uploadée (mode édition), on garde son URL
-      if (!img.file) {
-        finalUrls.push(img.url);
-        continue;
-      }
-
-      // Sinon on l'upload
+      if (!img.file) { finalUrls.push(img.url); continue; }
       const fileExt = img.file.name.split('.').pop();
       const fileName = `${Date.now()}_${i}.${fileExt}`;
-      const filePath = `produits/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage.from('product-images').upload(filePath, img.file);
+      const { error: uploadError } = await supabase.storage.from('product-images').upload(`produits/${fileName}`, img.file);
       if (uploadError) throw uploadError;
-
-      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(filePath);
+      const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(`produits/${fileName}`);
       finalUrls.push(urlData.publicUrl);
     }
 
-    const priceValue = document.getElementById('p-price').value;
-    const yearValue = document.getElementById('p-year').value;
-
     const productData = {
       category: document.getElementById('p-category').value,
-      price: priceValue ? parseFloat(priceValue) : null,
+      price: document.getElementById('p-price').value ? parseFloat(document.getElementById('p-price').value) : null,
       surface: document.getElementById('p-surface').value,
       condition: document.getElementById('p-condition').value,
-      year: yearValue ? parseInt(yearValue) : null,
+      year: document.getElementById('p-year').value ? parseInt(document.getElementById('p-year').value) : null,
       length: document.getElementById('p-length').value,
       width: document.getElementById('p-width').value,
       title: document.getElementById('p-title-de').value,
@@ -148,111 +123,159 @@ form.addEventListener('submit', async (e) => {
       description_fr: document.getElementById('p-desc-fr').value,
       description_it: document.getElementById('p-desc-it').value,
       description_en: document.getElementById('p-desc-en').value,
-      image_url: finalUrls[0], // La 1ère du tableau
-      gallery_urls: finalUrls  // Tout le tableau
+      image_url: finalUrls[0],
+      gallery_urls: finalUrls
     };
 
     if (editingProductId) {
-      const { error: dbError } = await supabase.from('products').update(productData).eq('id', editingProductId);
-      if (dbError) throw dbError;
-      statusMsg.textContent = "Produit mis à jour !";
+      const { error } = await supabase.from('products').update(productData).eq('id', editingProductId);
+      if (error) throw error;
+      status.textContent = "Produit mis à jour !";
     } else {
-      const { error: dbError } = await supabase.from('products').insert([productData]);
-      if (dbError) throw dbError;
-      statusMsg.textContent = "Produit ajouté !";
+      const { error } = await supabase.from('products').insert([productData]);
+      if (error) throw error;
+      status.textContent = "Produit ajouté !";
     }
-
-    statusMsg.style.color = "#4ade80";
-    resetForm();
+    status.style.color = "#4ade80";
+    resetProductForm();
     loadProducts();
 
-  } catch (error) {
-    console.error(error);
-    statusMsg.textContent = "Erreur: " + error.message;
-    statusMsg.style.color = "#ff4444";
-  } finally {
-    btn.disabled = false;
-  }
+  } catch (error) { status.textContent = "Erreur: " + error.message; status.style.color = "#ff4444"; } 
+  finally { btn.disabled = false; }
 });
 
-// --- CHARGER LA LISTE ---
 async function loadProducts() {
   const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-  if (error) { productsList.innerHTML = "Erreur."; return; }
-
-  if (data.length === 0) {
-    productsList.innerHTML = "<p style='color:#888'>Aucun produit.</p>";
-    return;
-  }
-
-  productsList.innerHTML = data.map(p => `
-    <div class="product-list-item">
+  const list = document.getElementById('products-list');
+  if (error) { list.innerHTML = "Erreur."; return; }
+  if (data.length === 0) { list.innerHTML = "<p style='color:#888'>Aucun produit.</p>"; return; }
+  list.innerHTML = data.map(p => `
+    <div class="list-item">
       <img src="${p.image_url}" alt="photo">
-      <div class="product-info">
+      <div class="item-info">
         <h4>${p.title_de || p.title}</h4>
-        <p>${p.price ? p.price + ' €' : 'Prix non défini'} · ${p.category} · ${p.condition}</p>
+        <p>${p.price ? p.price + ' €' : 'Prix non défini'} · ${p.category}</p>
       </div>
-      <div class="product-actions">
-        <button class="btn-edit" onclick="editProduct('${p.id}')">Modifier</button>
+      <div>
+        <button class="btn-delete" style="border-color:#fff; color:#fff;" onclick="editProduct('${p.id}')">Modifier</button>
         <button class="btn-delete" onclick="deleteProduct('${p.id}')">Supprimer</button>
       </div>
     </div>
   `).join('');
 }
 
-// --- MODIFIER UN PRODUIT ---
 window.editProduct = async function(id) {
-  const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
-  if (error) return alert("Erreur de chargement.");
-
-  const p = data;
-  editingProductId = p.id;
-
-  // Remplir les champs textes
-  document.getElementById('p-title-de').value = p.title_de || p.title || '';
-  document.getElementById('p-title-fr').value = p.title_fr || '';
-  document.getElementById('p-title-it').value = p.title_it || '';
-  document.getElementById('p-title-en').value = p.title_en || '';
-  document.getElementById('p-desc-de').value = p.description_de || p.description || '';
-  document.getElementById('p-desc-fr').value = p.description_fr || '';
-  document.getElementById('p-desc-it').value = p.description_it || '';
-  document.getElementById('p-desc-en').value = p.description_en || '';
-  document.getElementById('p-category').value = p.category || 'mobile_home';
-  document.getElementById('p-price').value = p.price || '';
-  document.getElementById('p-surface').value = p.surface || '';
-  document.getElementById('p-condition').value = p.condition || 'Neuf';
-  document.getElementById('p-year').value = p.year || '';
-  document.getElementById('p-length').value = p.length || '';
-  document.getElementById('p-width').value = p.width || '';
-
-  // Charger les images existantes
-  const existingImages = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls : [p.image_url];
+  const { data } = await supabase.from('products').select('*').eq('id', id).single();
+  if (!data) return;
+  editingProductId = data.id;
+  document.getElementById('p-title-de').value = data.title_de || data.title || '';
+  document.getElementById('p-title-fr').value = data.title_fr || '';
+  document.getElementById('p-title-it').value = data.title_it || '';
+  document.getElementById('p-title-en').value = data.title_en || '';
+  document.getElementById('p-desc-de').value = data.description_de || data.description || '';
+  document.getElementById('p-desc-fr').value = data.description_fr || '';
+  document.getElementById('p-desc-it').value = data.description_it || '';
+  document.getElementById('p-desc-en').value = data.description_en || '';
+  document.getElementById('p-category').value = data.category || 'mobile_home';
+  document.getElementById('p-price').value = data.price || '';
+  document.getElementById('p-surface').value = data.surface || '';
+  document.getElementById('p-condition').value = data.condition || 'Neuf';
+  document.getElementById('p-year').value = data.year || '';
+  document.getElementById('p-length').value = data.length || '';
+  document.getElementById('p-width').value = data.width || '';
+  
+  const existingImages = data.gallery_urls && data.gallery_urls.length > 0 ? data.gallery_urls : [data.image_url];
   productImages = existingImages.map(url => ({ file: null, url: url }));
   renderImagePreviews();
-
-  // Changer l'UI
-  formTitle.textContent = "Modifier le produit";
-  btnSubmitForm.textContent = "Mettre à jour le produit";
-  btnCancelEdit.style.display = 'block';
+  
+  document.getElementById('form-title').textContent = "Modifier le produit";
+  document.getElementById('btn-submit-product').textContent = "Mettre à jour";
+  document.getElementById('btn-cancel-edit').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --- RÉINITIALISER ---
-window.resetForm = function() {
+window.resetProductForm = function() {
   editingProductId = null;
-  form.reset();
+  document.getElementById('add-product-form').reset();
   productImages = [];
   renderImagePreviews();
-  formTitle.textContent = "Ajouter un nouveau produit";
-  btnSubmitForm.textContent = "Ajouter le produit";
-  btnCancelEdit.style.display = 'none';
-  statusMsg.textContent = "";
+  document.getElementById('form-title').textContent = "Ajouter un produit";
+  document.getElementById('btn-submit-product').textContent = "Ajouter le produit";
+  document.getElementById('btn-cancel-edit').style.display = 'none';
+  document.getElementById('status-product').textContent = "";
 }
 
-// --- SUPPRIMER ---
 window.deleteProduct = async function(id) {
-  if (!confirm("Voulez-vous vraiment supprimer ce produit ?")) return;
-  const { error } = await supabase.from('products').delete().eq('id', id);
-  if (error) alert("Erreur.");
-  else loadProducts();
+  if (!confirm("Supprimer ce produit ?")) return;
+  await supabase.from('products').delete().eq('id', id);
+  loadProducts();
+}
+
+// ==========================================
+// GESTION DES TÉMOIGNAGES
+// ==========================================
+document.getElementById('add-testimonial-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btn-submit-testimonial');
+  const status = document.getElementById('status-testimonial');
+  btn.disabled = true;
+  status.textContent = "Traitement en cours...";
+  status.style.color = "#aaa";
+
+  try {
+    const file = document.getElementById('t-image').files[0];
+    if (!file) throw new Error("Veuillez ajouter une photo.");
+
+    // 1. Upload de la photo dans le même bucket (product-images)
+    const fileExt = file.name.split('.').pop();
+    const fileName = `testi_${Date.now()}.${fileExt}`;
+    const { error: uploadError } = await supabase.storage.from('product-images').upload(`temoignages/${fileName}`, file);
+    if (uploadError) throw uploadError;
+    
+    const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(`temoignages/${fileName}`);
+
+    // 2. Insertion dans la base
+    const { error: dbError } = await supabase.from('testimonials').insert([{
+      name: document.getElementById('t-name').value,
+      quote: document.getElementById('t-quote').value,
+      image_url: urlData.publicUrl
+    }]);
+
+    if (dbError) throw dbError;
+
+    status.textContent = "Témoignage ajouté !";
+    status.style.color = "#4ade80";
+    document.getElementById('add-testimonial-form').reset();
+    loadTestimonials();
+
+  } catch (error) {
+    status.textContent = "Erreur: " + error.message;
+    status.style.color = "#ff4444";
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+async function loadTestimonials() {
+  const { data, error } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
+  const list = document.getElementById('testimonials-list');
+  if (error) { list.innerHTML = "Erreur."; return; }
+  if (data.length === 0) { list.innerHTML = "<p style='color:#888'>Aucun témoignage.</p>"; return; }
+  
+  list.innerHTML = data.map(t => `
+    <div class="list-item">
+      <img src="${t.image_url}" alt="photo" style="border-radius: 50%;">
+      <div class="item-info">
+        <h4>${t.name}</h4>
+        <p style="font-style:italic;">"${t.quote.substring(0, 50)}..."</p>
+      </div>
+      <button class="btn-delete" onclick="deleteTestimonial('${t.id}')">Supprimer</button>
+    </div>
+  `).join('');
+}
+
+window.deleteTestimonial = async function(id) {
+  if (!confirm("Supprimer ce témoignage ?")) return;
+  await supabase.from('testimonials').delete().eq('id', id);
+  loadTestimonials();
 }
