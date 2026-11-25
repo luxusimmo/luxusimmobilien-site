@@ -37,10 +37,8 @@ function applyLanguage(lang) {
   localStorage.setItem('luxus_site_lang', lang);
   document.documentElement.lang = lang;
 
-  // ⚠️ LIGNE MAGIQUE : On recharge les témoignages pour traduire "Client Vérifié"
-  if (typeof fetchTestimonials === 'function') {
-    fetchTestimonials();
-  }
+  // ⚠️ LA CORRECTION EST ICI : On envoie un signal pour dire que la langue a changé
+  window.dispatchEvent(new Event('langChanged'));
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
