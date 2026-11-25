@@ -51,6 +51,7 @@
   <a href="#" onclick="showCategory('mobile_home')" data-i18n="nav_mobile">Mobile Homes</a>
   <a href="#" onclick="showCategory('maritime')" data-i18n="nav_maritime">Maritime</a>
   <a href="#" onclick="showCategory('office')" data-i18n="nav_office">Office</a>
+  <a href="#" onclick="showView('faq'); document.getElementById('mobile-nav').hidden=true;" data-i18n="nav_faq">FAQ</a>
   <a href="#impressum" onclick="document.getElementById('mobile-nav').hidden=true; showView('home')" data-i18n="nav_contact">Contact</a>
 </nav>
 
@@ -193,7 +194,37 @@
     </div>
   </div>
 
-  <!-- ================= VUE 4 : IMPRESSUM ================= -->
+  <!-- ================= VUE 4 : FAQ ================= -->
+  <div id="view-faq" class="page-view" hidden>
+    <div class="container" style="max-width: 800px;">
+      <button class="btn-back" onclick="showView('home')">← <span data-i18n="back_home">Zurück zur Startseite</span></button>
+      <h1 class="page-title" data-i18n="faq_title">Häufig gestellte Fragen (FAQ)</h1>
+      
+      <div class="faq-container">
+        <details class="faq-item reveal">
+          <summary data-i18n="faq_q1">Liefern Sie auch außerhalb von Berlin?</summary>
+          <p data-i18n="faq_a1">Ja, wir liefern unsere mobilen Häuser und Container deutschlandweit sowie in ausgewählte europäische Länder. Die Lieferkosten variieren je nach Entfernung.</p>
+        </details>
+        
+        <details class="faq-item reveal">
+          <summary data-i18n="faq_q2">Benötige ich eine Baugenehmigung für ein Mobilheim?</summary>
+          <p data-i18n="faq_a2">Das hängt von der Größe des Mobilheims und den örtlichen Bauvorschriften ab. Kleine Modelle unter einer bestimmten Quadratmeterzahl sind oft genehmigungsfrei. Wir beraten Sie gerne dazu.</p>
+        </details>
+        
+        <details class="faq-item reveal">
+          <summary data-i18n="faq_q3">Wie lange dauert die Lieferung?</summary>
+          <p data-i18n="faq_a3">Die Lieferzeit beträgt in der Regel 4 bis 8 Wochen, je nach Modell und individuellen Anpassungen.</p>
+        </details>
+        
+        <details class="faq-item reveal">
+          <summary data-i18n="faq_q4">Kann ich die Innenausstattung anpassen?</summary>
+          <p data-i18n="faq_a4">Absolut. Wir bieten maßgeschneiderte Lösungen an. Kontaktieren Sie uns einfach über WhatsApp, um Ihre Wünsche zu besprechen.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VUE 5 : IMPRESSUM ================= -->
   <div id="view-impressum" class="page-view" hidden>
     <div class="container" style="max-width: 800px;">
       <button class="btn-back" onclick="showView('home')">← <span data-i18n="back_home">Zurück zur Startseite</span></button>
@@ -217,7 +248,7 @@
     </div>
   </div>
 
-  <!-- ================= VUE 5 : DATENSCHUTZ ================= -->
+  <!-- ================= VUE 6 : DATENSCHUTZ ================= -->
   <div id="view-privacy" class="page-view" hidden>
     <div class="container" style="max-width: 800px;">
       <button class="btn-back" onclick="showView('home')">← <span data-i18n="back_home">Zurück zur Startseite</span></button>
@@ -251,6 +282,7 @@
       <h4>Rechtliches</h4>
       <p style="cursor:pointer;" onclick="showView('impressum')">Impressum</p>
       <p style="cursor:pointer;" onclick="showView('privacy')">Datenschutzerklärung</p>
+      <p style="cursor:pointer;" onclick="showView('faq')">FAQ</p>
       <p style="margin-top: 15px;">Amtsgericht Charlottenburg<br>HRB 972025 B<br>USt-IdNr: DE305687569</p>
     </div>
 
