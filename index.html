@@ -6,7 +6,8 @@
 <title>LUXUSIMMOBILIEN — Premium Living</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Nouvelles polices : Playfair Display (titres) et Montserrat (texte) -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -49,11 +50,11 @@
       </div>
       <div class="hero-content">
         <span class="eyebrow" data-i18n="hero_eyebrow">Premium Living & Working</span>
-        <h1 data-i18n-html="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
-        <p data-i18n="hero_subtitle">Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container.</p>
+        <h1 class="hero-title" data-i18n-html="hero_title">Zukunft gestalten.<br>Anders wohnen.</h1>
+        <p class="hero-subtitle" data-i18n="hero_subtitle">Entdecken Sie unsere exklusiven mobilen Häuser und maritimen Container.</p>
         <div class="hero-buttons">
-          <a href="#collections" class="btn-primary" data-i18n="hero_scroll">Kollektionen entdecken</a>
-          <a href="https://wa.me/491784065141" target="_blank" class="btn-outline" data-i18n="hero_quote">Angebot anfordern</a>
+          <a href="#collections" class="btn-main" data-i18n="hero_scroll">Kollektionen entdecken</a>
+          <a href="https://wa.me/491784065141" target="_blank" class="btn-secondary" data-i18n="hero_quote">Angebot anfordern</a>
         </div>
       </div>
     </section>
@@ -125,7 +126,7 @@
       </div>
     </section>
 
-    <!-- TÉMOIGNAGES (Nouvelle section) -->
+    <!-- TÉMOIGNAGES -->
     <section id="testimonials" class="testimonials-section">
       <div class="container">
         <h2 class="section-title center" data-i18n="testimonials_title">Ce que disent nos clients</h2>
