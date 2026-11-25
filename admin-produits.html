@@ -71,7 +71,6 @@
     <button class="btn-delete" onclick="logout()">Déconnexion</button>
   </div>
 
-  <!-- Menu Onglets -->
   <div class="admin-tabs">
     <button class="admin-tab active" onclick="switchAdminTab('products')">Produits</button>
     <button class="admin-tab" onclick="switchAdminTab('testimonials')">Témoignages</button>
@@ -121,6 +120,14 @@
           <div class="form-group">
             <label>État</label>
             <select id="p-condition"><option value="Neuf">Neuf</option><option value="Occasion">Occasion</option></select>
+          </div>
+          <div class="form-group">
+            <label>Disponibilité</label>
+            <select id="p-availability">
+              <option value="Disponible">Disponible</option>
+              <option value="Réservé">Réservé</option>
+              <option value="Vendu">Vendu</option>
+            </select>
           </div>
           <div class="form-group"><label>Année</label><input type="number" id="p-year" required /></div>
           <div class="form-group"><label>Longueur</label><input type="text" id="p-length" /></div>
