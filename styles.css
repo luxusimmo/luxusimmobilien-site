@@ -230,25 +230,32 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s; border: 1px solid #444; cursor: pointer; color: #fff;
 }
 
+/* ================= ANIMATIONS (REVEAL) ================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ================= RESPONSIVE MOBILE ================= */
 @media (max-width: 900px) {
-  /* On force le header à ne pas exploser */
   .site-header { padding: 12px 15px; }
   .brand { font-size: 13px !important; letter-spacing: 0.5px !important; max-width: 65%; overflow: hidden; text-overflow: ellipsis; }
   .header-controls { gap: 10px !important; }
   
-  /* On empêche le logo du footer de casser la page */
   .footer-logo { font-size: 20px !important; }
   
-  /* On empile les blocs */
   .grid-3, .product-detail-layout, .footer-grid { grid-template-columns: 1fr; }
   .stats-container { grid-template-columns: 1fr; gap: 30px; }
   .collections { padding: 60px 20px; }
   
-  /* Boutons flottants remontés à fond pour être visibles sur téléphone */
   .floating-wa { bottom: 80px; right: 20px; width: 50px; height: 50px; }
   .floating-top { bottom: 140px; right: 22px; width: 45px; height: 45px; }
   
-  /* Footer centré sur mobile */
   .footer-grid { text-align: center; }
 }
