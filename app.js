@@ -43,6 +43,7 @@ window.showView = function(viewName) {
   document.getElementById('view-home').hidden = true;
   document.getElementById('view-category').hidden = true;
   document.getElementById('view-product').hidden = true;
+  document.getElementById('view-faq').hidden = true;
   document.getElementById('view-impressum').hidden = true;
   document.getElementById('view-privacy').hidden = true;
   
@@ -71,7 +72,6 @@ window.showCategory = function(category) {
       const price = p.price ? p.price.toLocaleString(lang, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }) : t.priceOnReq;
       const img = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls[0] : p.image_url;
       
-      // Gestion du badge de disponibilité
       let displayStatus = p.availability || 'Disponible';
       let badgeClass = 'badge-dispo';
       if (displayStatus === 'Vendu' || displayStatus === 'Verkauft' || displayStatus === 'Venduto' || displayStatus === 'Sold') {
@@ -84,10 +84,11 @@ window.showCategory = function(category) {
         displayStatus = t.status_dispo;
       }
 
+      // LAZY LOADING AJOUTÉ ICI (loading="lazy")
       return `
         <div class="product-card reveal" onclick="showProductDetail('${p.id}')">
           <div class="card-image">
-            <img src="${img}" alt="${title}">
+            <img src="${img}" alt="${title}" loading="lazy">
             <span class="status-badge ${badgeClass}">${displayStatus}</span>
           </div>
           <div class="card-info">
@@ -130,8 +131,10 @@ window.showProductDetail = function(id) {
 
   const gallery = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls : [p.image_url];
   document.getElementById('detail-main-img').src = gallery[0];
+  
+  // LAZY LOADING AJOUTÉ ICI (loading="lazy")
   document.getElementById('detail-thumbnails').innerHTML = gallery.map((img, i) => `
-    <img src="${img}" onclick="document.getElementById('detail-main-img').src='${img}'; document.querySelectorAll('.thumbnails img').forEach(el=>el.classList.remove('active')); this.classList.add('active')" class="${i === 0 ? 'active' : ''}">
+    <img src="${img}" loading="lazy" onclick="document.getElementById('detail-main-img').src='${img}'; document.querySelectorAll('.thumbnails img').forEach(el=>el.classList.remove('active')); this.classList.add('active')" class="${i === 0 ? 'active' : ''}">
   `).join('');
 
   showView('product');
@@ -164,7 +167,7 @@ async function fetchTestimonials() {
       <div class="testimonial-quote">"</div>
       <p class="testimonial-text">${t.quote}</p>
       <div class="testimonial-author">
-        <img src="${t.image_url}" alt="${t.name}">
+        <img src="${t.image_url}" alt="${t.name}" loading="lazy">
         <div>
           <h4>${t.name}</h4>
           <span>${translatedVerified}</span>
