@@ -10,6 +10,9 @@
     "cat_2_title": "Maritime", "cat_2_desc": "Robustheit im Dienst der Logistik. Zuverlässige und modulare Lagerlösungen.",
     "cat_3_title": "Office", "cat_3_desc": "Flexible Arbeitsumgebungen. Sofort einsatzbereite Bürocontainer für Ihr Team.",
     "btn_explore": "Entdecken →",
+    "testimonials_title": "Was unsere Kunden sagen",
+    "testimonials_subtitle": "Sie haben uns vertraut.",
+    "client_verified": "Verifizierter Kunde",
     "footer_legal": "Impressum", "footer_registry": "Registereintrag", "footer_contact": "Kontakt", "footer_rights": "Alle Rechte vorbehalten.",
     "back_home": "Zurück zur Startseite", "back_list": "Zurück zur Liste", "desc_title": "Beschreibung", "contact_us": "Kontaktieren Sie uns"
   },
@@ -24,6 +27,9 @@
     "cat_2_title": "Marittimi", "cat_2_desc": "Robustezza al servizio della logistica. Soluzioni di stoccaggio affidabili e modulari.",
     "cat_3_title": "Ufficio", "cat_3_desc": "Ambienti di lavoro flessibili. Container per uffici pronti all'uso per il tuo team.",
     "btn_explore": "Esplora →",
+    "testimonials_title": "Cosa dicono i nostri clienti",
+    "testimonials_subtitle": "Si sono fidati di noi.",
+    "client_verified": "Cliente Verificato",
     "footer_legal": "Note Legali", "footer_registry": "Registro Imprese", "footer_contact": "Contatto", "footer_rights": "Tutti i diritti riservati.",
     "back_home": "Torna alla home", "back_list": "Torna alla lista", "desc_title": "Descrizione", "contact_us": "Contattaci"
   },
@@ -38,6 +44,9 @@
     "cat_2_title": "Maritime", "cat_2_desc": "La robustesse au service de la logistique. Des solutions de stockage fiables et modulables.",
     "cat_3_title": "Bureau", "cat_3_desc": "Espaces de travail flexibles. Des conteneurs bureaux prêts à l'emploi pour votre équipe.",
     "btn_explore": "Explorer →",
+    "testimonials_title": "Ce que disent nos clients",
+    "testimonials_subtitle": "Ils nous ont fait confiance.",
+    "client_verified": "Client Vérifié",
     "footer_legal": "Mentions Légales", "footer_registry": "Registre du Commerce", "footer_contact": "Contact", "footer_rights": "Tous droits réservés.",
     "back_home": "Retour à l'accueil", "back_list": "Retour à la liste", "desc_title": "Description", "contact_us": "Nous contacter"
   },
@@ -52,6 +61,9 @@
     "cat_2_title": "Maritime", "cat_2_desc": "Robustness at the service of logistics. Reliable and modular storage solutions.",
     "cat_3_title": "Office", "cat_3_desc": "Flexible workspaces. Ready-to-use office containers for your team.",
     "btn_explore": "Explore →",
+    "testimonials_title": "What our clients say",
+    "testimonials_subtitle": "They trusted us.",
+    "client_verified": "Verified Client",
     "footer_legal": "Legal Notice", "footer_registry": "Commercial Register", "footer_contact": "Contact", "footer_rights": "All rights reserved.",
     "back_home": "Back to home", "back_list": "Back to list", "desc_title": "Description", "contact_us": "Contact us"
   }
