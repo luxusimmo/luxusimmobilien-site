@@ -36,14 +36,14 @@ a { color: inherit; text-decoration: none; }
 }
 .brand {
   display: flex; align-items: center; cursor: pointer;
-  max-width: 60%; /* Empêche le logo de pousser le menu */
+  max-width: 60%;
 }
 .brand-logo {
-  height: 45px; /* Taille réduite pour l'en-tête */
+  height: 45px;
   width: auto;
   max-width: 180px;
   object-fit: contain;
-  mix-blend-mode: screen; /* Rend le fond noir transparent */
+  mix-blend-mode: screen;
 }
 
 .header-controls {
@@ -244,22 +244,86 @@ a { color: inherit; text-decoration: none; }
   transform: translateY(40px);
   transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ================= COOKIES & LÉGAL ================= */
+.email-link {
+  color: #fff;
+  border-bottom: 1px solid #fff;
+  transition: 0.3s;
+}
+.email-link:hover {
+  color: #888;
+  border-color: #888;
+}
+
+.legal-text {
+  color: #bbb;
+  font-size: 15px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+.legal-text h3 {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+/* Bannière Cookies */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  border-top: 1px solid #333;
+  z-index: 100000;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+.cookie-content {
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+.cookie-content p {
+  font-size: 13px;
+  color: #ccc;
+  margin: 0;
+}
+.cookie-content a {
+  color: #fff;
+  text-decoration: underline;
+}
+.btn-cookie {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+}
+.btn-cookie:hover {
+  background: #ddd;
 }
 
 /* ================= RESPONSIVE MOBILE ================= */
 @media (max-width: 900px) {
   .site-header { padding: 10px 15px; }
   
-  /* On force le logo à être petit sur mobile */
-  .brand-logo { 
-    height: 30px !important; 
-    max-width: 130px !important;
-  }
-  
+  .brand-logo { height: 30px !important; max-width: 130px !important; }
   .footer-logo-img { height: 50px !important; max-width: 180px !important; }
   
   .grid-3, .product-detail-layout, .footer-grid { grid-template-columns: 1fr; }
@@ -270,4 +334,6 @@ a { color: inherit; text-decoration: none; }
   .floating-top { bottom: 140px; right: 22px; width: 45px; height: 45px; }
   
   .footer-grid { text-align: center; }
+
+  .cookie-content { flex-direction: column; text-align: center; }
 }
