@@ -9,13 +9,14 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -25,30 +26,31 @@ a { color: inherit; text-decoration: none; }
 
 /* ================= HEADER ================= */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
   display: flex; justify-content: space-between; align-items: center;
-  padding: 20px 40px;
-  background: rgba(5, 5, 5, 0.85); 
+  padding: 15px 20px;
+  background: rgba(5, 5, 5, 0.95); 
   backdrop-filter: blur(10px); 
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
 }
 .brand {
-  font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: 2px; cursor: pointer;
-  white-space: nowrap; /* Empêche le logo de revenir à la ligne */
+  font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: 1px; cursor: pointer;
+  white-space: nowrap; 
 }
 .header-controls {
-  display: flex; gap: 20px; align-items: center;
-  flex-shrink: 0; /* Empêche les boutons d'être écrasés */
+  display: flex; gap: 15px; align-items: center;
+  flex-shrink: 0;
 }
 .icon-btn {
   background: none; border: none; color: var(--text); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s; padding: 5px;
 }
 .icon-btn:hover { opacity: 0.6; }
 
 /* Menu Langue */
-.lang-container { position: relative; z-index: 1001; }
+.lang-container { position: relative; z-index: 10000; }
 .dropdown-menu {
   position: absolute; top: 120%; right: 0;
   background: rgba(15,15,15,0.95); border: 1px solid var(--border);
@@ -65,14 +67,13 @@ a { color: inherit; text-decoration: none; }
 
 /* Mobile Nav */
 .mobile-nav {
-  position: fixed; inset: 0; background: rgba(5,5,5,0.98); z-index: 9999;
+  position: fixed; inset: 0; background: rgba(5,5,5,0.98); z-index: 9998;
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 30px;
 }
 .mobile-nav a {
   font-family: var(--font-display); font-size: 32px; font-style: italic; letter-spacing: 2px;
   cursor: pointer; transition: 0.3s;
 }
-.mobile-nav a:hover { color: #888; }
 
 /* ================= HERO ================= */
 .hero {
@@ -92,7 +93,7 @@ a { color: inherit; text-decoration: none; }
   color: #ccc; margin-bottom: 25px; font-weight: 500;
 }
 .hero-title {
-  font-family: var(--font-display); font-size: clamp(45px, 7vw, 85px);
+  font-family: var(--font-display); font-size: clamp(40px, 7vw, 85px);
   font-weight: 400; line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 25px;
 }
 .hero-subtitle { 
@@ -100,7 +101,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: 300; line-height: 1.8; letter-spacing: 0.5px;
 }
 
-/* Boutons de l'en-tête */
+/* Boutons */
 .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
 .btn-main {
   background: #fff; color: #000; padding: 16px 40px; border-radius: 0;
@@ -117,14 +118,14 @@ a { color: inherit; text-decoration: none; }
 
 /* ================= SECTIONS ================= */
 .section-title { 
-  font-family: var(--font-display); font-size: clamp(36px, 4vw, 48px); 
-  font-weight: 400; letter-spacing: 0; margin-bottom: 15px; 
+  font-family: var(--font-display); font-size: clamp(32px, 4vw, 48px); 
+  font-weight: 400; margin-bottom: 15px; 
 }
 .section-title.center { text-align: center; }
 .section-subtitle { text-align: center; color: var(--muted); font-size: 15px; margin-bottom: 60px; letter-spacing: 1px; }
 
 /* À PROPOS */
-.about-section { padding: 120px 20px; background: var(--bg); text-align: center; }
+.about-section { padding: 100px 20px; background: var(--bg); text-align: center; }
 .about-container { max-width: 800px; margin: 0 auto; }
 .about-text { font-size: 16px; line-height: 2; color: #bbb; font-weight: 300; }
 
@@ -134,8 +135,8 @@ a { color: inherit; text-decoration: none; }
 .stat-number { font-family: var(--font-display); font-size: 55px; font-weight: 400; color: #fff; margin-bottom: 10px; }
 .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
 
-/* GAMMES / CATÉGORIES */
-.collections { padding: 120px 50px; }
+/* GAMMES */
+.collections { padding: 100px 50px; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1200px; margin: 0 auto; }
 .category-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 0;
@@ -150,14 +151,13 @@ a { color: inherit; text-decoration: none; }
 .btn-explore { font-size: 12px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; border-bottom: 1px solid transparent; padding-bottom: 2px; }
 .category-card:hover .btn-explore { border-color: #fff; }
 
-/* ================= TÉMOIGNAGES ================= */
-.testimonials-section { padding: 120px 20px; background: var(--bg); }
-.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+/* TÉMOIGNAGES */
+.testimonials-section { padding: 100px 20px; background: var(--bg); }
+.testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
 .testimonial-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 0;
-  padding: 50px 40px; position: relative; display: flex; flex-direction: column; transition: transform 0.3s;
+  padding: 40px 30px; position: relative; display: flex; flex-direction: column; transition: transform 0.3s;
 }
-.testimonial-card:hover { transform: translateY(-5px); border-color: #444; }
 .testimonial-quote { font-family: var(--font-display); font-size: 90px; color: rgba(255,255,255,0.05); line-height: 0; position: absolute; top: 40px; right: 30px; }
 .testimonial-text { font-size: 15px; color: #bbb; line-height: 1.8; font-style: italic; font-weight: 300; margin-bottom: 30px; flex-grow: 1; z-index: 1; }
 .testimonial-author { display: flex; align-items: center; gap: 15px; }
@@ -165,40 +165,36 @@ a { color: inherit; text-decoration: none; }
 .testimonial-author h4 { font-size: 15px; font-weight: 500; margin: 0; color: #fff; font-family: var(--font-display); }
 .testimonial-author span { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
 
-/* ================= VUES / PAGES ================= */
-.page-view { padding: 140px 20px 100px; min-height: 80vh; background: var(--bg); }
+/* VUES / PAGES */
+.page-view { padding: 120px 20px 80px; min-height: 80vh; background: var(--bg); }
 .container { max-width: 1200px; margin: 0 auto; }
 .btn-back { background: none; border: none; color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-bottom: 40px; transition: 0.3s; }
-.btn-back:hover { color: var(--text); }
-.page-title { font-family: var(--font-display); font-size: clamp(36px, 5vw, 60px); font-weight: 400; margin-bottom: 50px; }
+.page-title { font-family: var(--font-display); font-size: clamp(32px, 5vw, 60px); font-weight: 400; margin-bottom: 50px; }
 
 /* GRILLE PRODUITS */
-.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
 .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 0; overflow: hidden; cursor: pointer; transition: 0.3s; }
-.product-card:hover { transform: translateY(-5px); border-color: #444; }
-.card-image { width: 100%; height: 280px; overflow: hidden; }
+.card-image { width: 100%; height: 250px; overflow: hidden; }
 .card-image img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
-.product-card:hover .card-image img { transform: scale(1.05); }
-.card-info { padding: 30px; }
+.card-info { padding: 25px; }
 .card-info h3 { font-family: var(--font-display); font-size: 24px; font-weight: 400; margin-bottom: 10px; }
-.card-price { font-size: 18px; font-weight: 500; margin-bottom: 10px; letter-spacing: 1px; }
+.card-price { font-size: 18px; font-weight: 500; margin-bottom: 10px; }
 .card-specs { font-size: 13px; color: var(--muted); margin-bottom: 25px; }
 .btn-detail { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; border-bottom: 1px solid transparent; transition: 0.3s; }
-.product-card:hover .btn-detail { border-color: #fff; }
 
 /* FICHE PRODUIT */
-.product-detail-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 70px; }
+.product-detail-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; }
 .product-detail-images { display: flex; flex-direction: column; gap: 15px; }
-.main-img { width: 100%; max-height: 650px; object-fit: cover; border-radius: 0; border: 1px solid var(--border); }
+.main-img { width: 100%; max-height: 600px; object-fit: cover; border-radius: 0; border: 1px solid var(--border); }
 .thumbnails { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
-.thumbnails img { width: 90px; height: 65px; object-fit: cover; border-radius: 0; cursor: pointer; border: 1px solid transparent; opacity: 0.5; transition: 0.3s; }
+.thumbnails img { width: 80px; height: 60px; object-fit: cover; border-radius: 0; cursor: pointer; border: 1px solid transparent; opacity: 0.5; transition: 0.3s; }
 .thumbnails img:hover, .thumbnails img.active { border-color: #fff; opacity: 1; }
 .product-detail-info { display: flex; flex-direction: column; }
 .badge-category { display: inline-block; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; width: fit-content; margin-bottom: 20px; border: 1px solid var(--border); }
-.product-detail-info h1 { font-family: var(--font-display); font-size: clamp(36px, 4vw, 50px); font-weight: 400; margin-bottom: 15px; line-height: 1.2; }
+.product-detail-info h1 { font-family: var(--font-display); font-size: clamp(32px, 4vw, 50px); font-weight: 400; margin-bottom: 15px; line-height: 1.2; }
 .detail-subtitle { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; }
 .detail-price { font-family: var(--font-display); font-size: 36px; font-weight: 400; margin-bottom: 40px; }
-.specs-box { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; background: var(--surface); padding: 30px; border-radius: 0; border: 1px solid var(--border); margin-bottom: 40px; }
+.specs-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: var(--surface); padding: 25px; border-radius: 0; border: 1px solid var(--border); margin-bottom: 40px; }
 .spec-item { display: flex; gap: 15px; align-items: center; }
 .spec-icon { font-size: 20px; opacity: 0.6; }
 .spec-item strong { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
@@ -211,45 +207,48 @@ a { color: inherit; text-decoration: none; }
   background: #25D366; color: #fff; padding: 20px 30px; border-radius: 0;
   font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; width: 100%; border: none;
 }
-.btn-whatsapp-detail:hover { background: #1ebe54; transform: translateY(-2px); }
 
-/* ================= FOOTER ================= */
-.site-footer { padding: 120px 50px 40px; border-top: 1px solid var(--border); background: var(--bg); }
-.footer-logo { font-family: var(--font-display); font-size: 45px; font-weight: 400; margin-bottom: 60px; }
-.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; margin-bottom: 80px; }
+/* FOOTER */
+.site-footer { padding: 100px 20px 40px; border-top: 1px solid var(--border); background: var(--bg); text-align: center; }
+.footer-logo { font-family: var(--font-display); font-size: 32px; font-weight: 400; margin-bottom: 40px; cursor: pointer; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 60px; text-align: left; }
 .footer-grid h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 20px; }
 .footer-grid p { font-size: 13px; color: #aaa; line-height: 2; font-weight: 300; }
-.footer-bottom { border-top: 1px solid var(--border); padding-top: 30px; text-align: center; font-size: 11px; letter-spacing: 1px; color: #555; }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 30px; text-align: center; font-size: 11px; color: #555; }
 
 /* ================= BOUTONS FLOTTANTS ================= */
 .floating-wa {
-  position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+  position: fixed; bottom: 30px; right: 30px; z-index: 99999;
   width: 55px; height: 55px; background: #25D366; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s; color: #fff;
 }
-.floating-wa:hover { transform: scale(1.1); }
 .floating-top {
-  position: fixed; bottom: 100px; right: 35px; z-index: 9999;
+  position: fixed; bottom: 100px; right: 35px; z-index: 99999;
   width: 45px; height: 45px; background: #222; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s; border: 1px solid #444; cursor: pointer; color: #fff;
 }
-.floating-top:hover { transform: scale(1.1); background: #333; }
 
 /* ================= RESPONSIVE MOBILE ================= */
 @media (max-width: 900px) {
-  /* Réduction du logo pour laisser la place au menu */
-  .site-header { padding: 15px 15px; }
-  .brand { font-size: 14px; letter-spacing: 0.5px; } 
-  .header-controls { gap: 10px; }
+  /* On force le header à ne pas exploser */
+  .site-header { padding: 12px 15px; }
+  .brand { font-size: 13px !important; letter-spacing: 0.5px !important; max-width: 65%; overflow: hidden; text-overflow: ellipsis; }
+  .header-controls { gap: 10px !important; }
   
+  /* On empêche le logo du footer de casser la page */
+  .footer-logo { font-size: 20px !important; }
+  
+  /* On empile les blocs */
   .grid-3, .product-detail-layout, .footer-grid { grid-template-columns: 1fr; }
-  .stats-container { grid-template-columns: 1fr; gap: 40px; }
-  .collections { padding: 80px 20px; }
-  .hero-title { font-size: 42px; }
-
-  /* Correction : Boutons flottants remontés pour être visibles sur mobile */
-  .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; }
-  .floating-top { bottom: 85px; right: 22px; width: 45px; height: 45px; }
+  .stats-container { grid-template-columns: 1fr; gap: 30px; }
+  .collections { padding: 60px 20px; }
+  
+  /* Boutons flottants remontés à fond pour être visibles sur téléphone */
+  .floating-wa { bottom: 80px; right: 20px; width: 50px; height: 50px; }
+  .floating-top { bottom: 140px; right: 22px; width: 45px; height: 45px; }
+  
+  /* Footer centré sur mobile */
+  .footer-grid { text-align: center; }
 }
