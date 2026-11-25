@@ -11,12 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const acceptBtn = document.getElementById('accept-cookies');
 
   if (cookieBanner && acceptBtn) {
-    // Si l'utilisateur n'a pas encore accepté
     if (!localStorage.getItem('cookiesAccepted')) {
-      // On affiche la bannière après 1.5 seconde
       setTimeout(() => { cookieBanner.hidden = false; }, 1500); 
     }
-    
     acceptBtn.addEventListener('click', () => {
       localStorage.setItem('cookiesAccepted', 'true');
       cookieBanner.hidden = true;
@@ -31,10 +28,10 @@ let allProducts = [];
 let currentCategory = '';
 
 const translations = {
-  de: { surface: 'Fläche', condition: 'Zustand', year: 'Baujahr', length: 'Länge', width: 'Breite', priceOnReq: 'Preis auf Anfrage', whatsapp: 'Auf WhatsApp anfragen', backHome: 'Zurück zur Startseite', backList: 'Zurück zur Liste', desc: 'Beschreibung', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office', client_verified: 'Verifizierter Kunde' },
-  it: { surface: 'Superficie', condition: 'Stato', year: 'Anno', length: 'Lunghezza', width: 'Larghezza', priceOnReq: 'Prezzo su richiesta', whatsapp: 'Richiedi su WhatsApp', backHome: 'Torna alla home', backList: 'Torna alla lista', desc: 'Descrizione', cat_mobile_home: 'Case Mobili', cat_maritime: 'Marittimi', cat_office: 'Ufficio', client_verified: 'Cliente Verificato' },
-  fr: { surface: 'Surface', condition: 'État', year: 'Année', length: 'Longueur', width: 'Largeur', priceOnReq: 'Prix sur demande', whatsapp: 'Demander sur WhatsApp', backHome: "Retour à l'accueil", backList: 'Retour à la liste', desc: 'Description', cat_mobile_home: 'Maisons Mobiles', cat_maritime: 'Maritime', cat_office: 'Bureau', client_verified: 'Client Vérifié' },
-  en: { surface: 'Surface', condition: 'Condition', year: 'Year', length: 'Length', width: 'Width', priceOnReq: 'Price on request', whatsapp: 'Inquire on WhatsApp', backHome: 'Back to home', backList: 'Back to list', desc: 'Description', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office', client_verified: 'Verified Client' }
+  de: { surface: 'Fläche', condition: 'Zustand', year: 'Baujahr', length: 'Länge', width: 'Breite', priceOnReq: 'Preis auf Anfrage', whatsapp: 'Auf WhatsApp anfragen', backHome: 'Zurück zur Startseite', backList: 'Zurück zur Liste', desc: 'Beschreibung', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office', client_verified: 'Verifizierter Kunde', status_dispo: 'Verfügbar', status_reserve: 'Reserviert', status_vendu: 'Verkauft' },
+  it: { surface: 'Superficie', condition: 'Stato', year: 'Anno', length: 'Lunghezza', width: 'Larghezza', priceOnReq: 'Prezzo su richiesta', whatsapp: 'Richiedi su WhatsApp', backHome: 'Torna alla home', backList: 'Torna alla lista', desc: 'Descrizione', cat_mobile_home: 'Case Mobili', cat_maritime: 'Marittimi', cat_office: 'Ufficio', client_verified: 'Cliente Verificato', status_dispo: 'Disponibile', status_reserve: 'Riservato', status_vendu: 'Venduto' },
+  fr: { surface: 'Surface', condition: 'État', year: 'Année', length: 'Longueur', width: 'Largeur', priceOnReq: 'Prix sur demande', whatsapp: 'Demander sur WhatsApp', backHome: "Retour à l'accueil", backList: 'Retour à la liste', desc: 'Description', cat_mobile_home: 'Maisons Mobiles', cat_maritime: 'Maritime', cat_office: 'Bureau', client_verified: 'Client Vérifié', status_dispo: 'Disponible', status_reserve: 'Réservé', status_vendu: 'Vendu' },
+  en: { surface: 'Surface', condition: 'Condition', year: 'Year', length: 'Length', width: 'Width', priceOnReq: 'Price on request', whatsapp: 'Inquire on WhatsApp', backHome: 'Back to home', backList: 'Back to list', desc: 'Description', cat_mobile_home: 'Mobile Homes', cat_maritime: 'Maritime', cat_office: 'Office', client_verified: 'Verified Client', status_dispo: 'Available', status_reserve: 'Reserved', status_vendu: 'Sold' }
 };
 
 function getLang() { return localStorage.getItem('luxus_site_lang') || 'de'; }
@@ -43,22 +40,16 @@ function getLang() { return localStorage.getItem('luxus_site_lang') || 'de'; }
 // 3. NAVIGATION ENTRE LES VUES
 // ==========================================
 window.showView = function(viewName) {
-  // On cache toutes les vues
   document.getElementById('view-home').hidden = true;
   document.getElementById('view-category').hidden = true;
   document.getElementById('view-product').hidden = true;
   document.getElementById('view-impressum').hidden = true;
   document.getElementById('view-privacy').hidden = true;
   
-  // On affiche la vue demandée
   const targetView = document.getElementById(`view-${viewName}`);
-  if (targetView) {
-    targetView.hidden = false;
-  }
+  if (targetView) targetView.hidden = false;
   
   window.scrollTo(0, 0);
-  
-  // Relancer les animations au changement de vue
   setTimeout(initRevealAnimations, 100);
 }
 
@@ -80,9 +71,25 @@ window.showCategory = function(category) {
       const price = p.price ? p.price.toLocaleString(lang, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }) : t.priceOnReq;
       const img = p.gallery_urls && p.gallery_urls.length > 0 ? p.gallery_urls[0] : p.image_url;
       
+      // Gestion du badge de disponibilité
+      let displayStatus = p.availability || 'Disponible';
+      let badgeClass = 'badge-dispo';
+      if (displayStatus === 'Vendu' || displayStatus === 'Verkauft' || displayStatus === 'Venduto' || displayStatus === 'Sold') {
+        badgeClass = 'badge-vendu';
+        displayStatus = t.status_vendu;
+      } else if (displayStatus === 'Réservé' || displayStatus === 'Reserviert' || displayStatus === 'Riservato' || displayStatus === 'Reserved') {
+        badgeClass = 'badge-reserve';
+        displayStatus = t.status_reserve;
+      } else {
+        displayStatus = t.status_dispo;
+      }
+
       return `
         <div class="product-card reveal" onclick="showProductDetail('${p.id}')">
-          <div class="card-image"><img src="${img}" alt="${title}"></div>
+          <div class="card-image">
+            <img src="${img}" alt="${title}">
+            <span class="status-badge ${badgeClass}">${displayStatus}</span>
+          </div>
           <div class="card-info">
             <h3>${title}</h3>
             <p class="card-price">${price}</p>
@@ -184,7 +191,6 @@ function initRevealAnimations() {
   reveals.forEach(reveal => observer.observe(reveal));
 }
 
-// Initialisation au chargement de la page
 fetchProducts().then(() => {
   setTimeout(initRevealAnimations, 300);
 });
@@ -192,7 +198,6 @@ fetchTestimonials().then(() => {
   setTimeout(initRevealAnimations, 300);
 });
 
-// Écouter le changement de langue
 window.addEventListener('langChanged', () => {
   fetchTestimonials().then(() => {
     setTimeout(initRevealAnimations, 300);
