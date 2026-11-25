@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://luxusimmo.github.io/luxusimmobilien-site/sitemap.xml
